@@ -21,7 +21,8 @@
       "Bash(curl:*)",
       "Bash(node:*)",
       "Bash(rm:*)",
-      "Bash(npm run build:*)"
+      "Bash(npm run build:*)",
+      "Bash(git config:*)"
     ],
     "deny": []
   }

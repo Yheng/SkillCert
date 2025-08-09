@@ -1,0 +1,7 @@
+[user]
+    name = Ariel Retes
+    email = yhengdesigns@gmail.com
+[commit]
+    template = .gitmessage
+[core]
+    excludesfile = .gitignore
