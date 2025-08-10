@@ -398,11 +398,7 @@ This project is licensed under the GPL-3.0 License - see the [LICENSE](LICENSE) 
 
 ## 📚 Documentation
 
-- **📋 Project Brief**: [docs/project-brief.md](docs/project-brief.md)
-- **🏗️ Architecture**: [docs/front-end-architecture.md](docs/front-end-architecture.md)
-- **🔗 API Reference**: [docs/api-reference.md](docs/api-reference.md)
-- **🎨 UI Components**: [docs/component-library.md](docs/component-library.md)
-- **⛓️ Smart Contracts**: [docs/smart-contracts.md](docs/smart-contracts.md)
+All technical documentation and implementation details are embedded within the codebase comments and this README file.
 
 ## 🐛 Known Issues & Roadmap
 
@@ -464,7 +460,6 @@ This project is licensed under the **GPL-3.0 License** - see the [LICENSE](LICEN
 **Ariel Retes**
 - 📧 Email: yhengdesigns@gmail.com
 - 💼 GitHub: [@Yheng](https://github.com/Yheng)
-- 🌐 Portfolio: [arielretes.dev](https://arielretes.dev)
 - ☕ Buy me a coffee: [buymeacoffee.com/arielretes](https://www.buymeacoffee.com/arielretes)
 
 ## 🙏 Acknowledgments
