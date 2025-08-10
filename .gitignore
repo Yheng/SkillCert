@@ -28,3 +28,6 @@ exclude/*
 
 .claude
 .claude/*
+
+docs
+docs/*
