@@ -5,7 +5,8 @@ import { Button } from "../components/ui/button"
 import { GlassCard } from "../components/shared/GlassCard"
 import { ThreeDBadge } from "../components/shared/ThreeDBadge"
 import { AuroraToast } from "../components/shared/AuroraToast"
-import Chart from "react-apexcharts"
+import ProgressChart from "../components/shared/ProgressChart"
+import CertificateCard from "../components/shared/CertificateCard"
 import { 
   FaCertificate, 
   FaTasks, 
@@ -25,146 +26,18 @@ const StatCard = ({ icon: Icon, title, value, description, color, delay }) => (
     initial={{ opacity: 0, y: 20 }}
     animate={{ opacity: 1, y: 0 }}
     transition={{ duration: 0.6, delay }}
+    className="stat-card"
   >
-    <div className="stat-card">
-      <div 
-        className="stat-icon"
-        style={{ background: `linear-gradient(45deg, ${color.split(' ')[1]}, ${color.split(' ')[3]})` }}
-      >
-        <Icon />
-      </div>
-      <div className="stat-value">{value}</div>
-      <div className="stat-title">{title}</div>
-      <div className="stat-description">{description}</div>
+    <div className="stat-icon" style={{ background: `linear-gradient(45deg, ${color || 'var(--teal), var(--blue)'})` }}>
+      <Icon />
     </div>
+    <div className="stat-value">{value}</div>
+    <div className="stat-title">{title}</div>
+    <div className="stat-description">{description}</div>
   </motion.div>
 )
 
-const CredentialCard = ({ credential, onView, onShare }) => (
-  <div className="credential-card">
-    <div className="credential-header">
-      <div className="credential-info">
-        <h3 className="credential-skill">{credential.skill}</h3>
-        <p className="credential-meta">
-          Issued: {new Date(credential.timestamp || credential.created_at).toLocaleDateString()}
-        </p>
-        <p className="credential-meta">
-          ID: #{credential.id}
-        </p>
-      </div>
-      <div style={{ marginLeft: '1rem' }}>
-        <div style={{
-          width: '3rem',
-          height: '3rem',
-          background: 'linear-gradient(45deg, var(--teal), var(--blue))',
-          borderRadius: '8px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          color: 'white',
-          fontWeight: 'bold',
-          fontSize: '0.75rem'
-        }}>
-          {credential.skill.slice(0, 4).toUpperCase()}
-        </div>
-      </div>
-    </div>
-    
-    <div className="credential-actions">
-      <Button 
-        size="sm" 
-        variant="glass"
-        onClick={() => onView(credential)}
-        style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}
-      >
-        <FaEye /> View
-      </Button>
-      <Button 
-        size="sm" 
-        variant="neumorphic"
-        onClick={() => onShare(credential)}
-        style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}
-      >
-        <FaShare /> Share
-      </Button>
-    </div>
-  </div>
-)
 
-const ProgressChart = ({ data }) => {
-  const chartOptions = {
-    chart: {
-      type: 'line',
-      background: 'transparent',
-      toolbar: { show: false },
-      animations: {
-        enabled: true,
-        easing: 'easeinout',
-        speed: 800,
-      }
-    },
-    stroke: {
-      curve: 'smooth',
-      width: 3,
-    },
-    fill: {
-      type: 'gradient',
-      gradient: {
-        shade: 'dark',
-        type: 'horizontal',
-        shadeIntensity: 0.5,
-        gradientToColors: ['#2DD4BF', '#3B82F6'],
-        inverseColors: false,
-        opacityFrom: 0.8,
-        opacityTo: 0.3,
-        stops: [0, 100],
-      },
-    },
-    xaxis: {
-      categories: data?.categories || ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-      labels: { style: { colors: '#9CA3AF' } },
-      axisBorder: { show: false },
-      axisTicks: { show: false },
-    },
-    yaxis: {
-      labels: { style: { colors: '#9CA3AF' } },
-      grid: { borderColor: '#374151' },
-    },
-    grid: {
-      borderColor: '#374151',
-      strokeDashArray: 4,
-    },
-    tooltip: {
-      theme: 'dark',
-      style: {
-        background: 'rgba(31, 42, 68, 0.9)',
-      },
-    },
-    colors: ['#2DD4BF'],
-  }
-
-  const series = [{
-    name: 'Skills Earned',
-    data: data?.values || [2, 4, 3, 6, 8, 12]
-  }]
-
-  return (
-    <GlassCard className="p-6">
-      <CardHeader className="pb-4">
-        <CardTitle className="text-gradient">Your Learning Progress</CardTitle>
-        <CardDescription>Track your skill development over time</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <Chart
-          options={chartOptions}
-          series={series}
-          type="line"
-          height={300}
-        />
-      </CardContent>
-    </GlassCard>
-  )
-}
 
 const Dashboard = () => {
   const [user, setUser] = React.useState(null)
@@ -181,6 +54,7 @@ const Dashboard = () => {
   const [walletAddress, setWalletAddress] = React.useState('')
   const [connectingWallet, setConnectingWallet] = React.useState(false)
   const [blockchainCredentials, setBlockchainCredentials] = React.useState([])
+  const [walletError, setWalletError] = React.useState(null)
 
   React.useEffect(() => {
     loadDashboardData()
@@ -208,19 +82,63 @@ const Dashboard = () => {
   const connectWallet = async () => {
     try {
       setConnectingWallet(true)
+      setWalletError(null)
+      
+      // Check if MetaMask is installed
+      if (typeof window.ethereum === 'undefined') {
+        setWalletError({
+          type: 'not_installed',
+          title: 'MetaMask Not Found',
+          message: 'Please install MetaMask browser extension to connect your wallet.',
+          action: 'Install MetaMask',
+          actionUrl: 'https://metamask.io/download/'
+        })
+        return
+      }
+      
       const result = await blockchainService.connectWallet()
       
       if (result.success) {
         setWalletConnected(true)
         setWalletAddress(result.address)
         loadBlockchainCredentials(result.address)
+        setWalletError(null)
         AuroraToast.success('Wallet connected successfully!')
       } else {
-        AuroraToast.error(`Failed to connect wallet: ${result.error}`)
+        // Handle specific error types
+        let errorDetails = {
+          type: 'connection_failed',
+          title: 'Connection Failed',
+          message: result.error || 'Unable to connect to your wallet.'
+        }
+        
+        if (result.error?.includes('User rejected')) {
+          errorDetails = {
+            type: 'user_rejected',
+            title: 'Connection Rejected',
+            message: 'You rejected the connection request. Please try again and approve the connection.'
+          }
+        } else if (result.error?.includes('network')) {
+          errorDetails = {
+            type: 'network_error',
+            title: 'Network Error',
+            message: 'Please check your internet connection and try again.'
+          }
+        }
+        
+        setWalletError(errorDetails)
+        AuroraToast.error(errorDetails.message)
       }
     } catch (error) {
       console.error('Wallet connection error:', error)
-      AuroraToast.error('Failed to connect wallet. Please make sure MetaMask is installed.')
+      const errorMessage = error.message || 'An unexpected error occurred'
+      setWalletError({
+        type: 'unexpected_error',
+        title: 'Unexpected Error',
+        message: errorMessage,
+        action: 'Retry Connection'
+      })
+      AuroraToast.error('Failed to connect wallet. Please try again.')
     } finally {
       setConnectingWallet(false)
     }
@@ -323,113 +241,187 @@ const Dashboard = () => {
 
   if (loading) {
     return (
-      <div className="loading-spinner">
-        <div style={{ textAlign: 'center' }}>
-          <div className="spinner"></div>
-          <p className="body-text" style={{ fontSize: '1.125rem' }}>Loading dashboard...</p>
-        </div>
+      <div className="loading-container">
+        <div className="loading-spinner" />
+        <div className="loading-text">Loading dashboard...</div>
       </div>
     )
   }
 
   return (
-    <div className="dashboard-container">
+    <>
+      {/* Page Header */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4 }}
+        className="page-header"
+      >
+        <h1 className="page-title">
+          Welcome back, {user?.name || 'User'}!
+        </h1>
+        <p className="page-subtitle">
+          Track your progress and manage your blockchain-verified credentials
+        </p>
+      </motion.div>
+      
       <div className="dashboard-content">
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          style={{ marginBottom: '2rem' }}
-        >
-          <h1 className="heading-h1" style={{ marginBottom: '1rem' }}>
-            Welcome back, {user?.name || 'User'}!
-          </h1>
-          <p className="subheading">
-            Track your progress and manage your blockchain-verified credentials
-          </p>
-        </motion.div>
 
-        {/* Wallet Connection Section */}
+        {/* Enhanced Wallet Connection Section */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.1 }}
-          className="glass-card"
-          style={{ padding: '1.5rem', marginBottom: '2rem' }}
+          transition={{ duration: 0.4, delay: 0.1 }}
+          className={`connection-card ${walletConnected ? 'success' : connectingWallet ? 'pending' : ''}`}
         >
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-              <div style={{
-                width: '50px',
-                height: '50px',
-                borderRadius: '50%',
-                background: walletConnected ? 'var(--green)' : 'var(--orange)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: 'white',
-                fontSize: '1.5rem'
-              }}>
-                {walletConnected ? <FaShieldAlt /> : <FaExclamationTriangle />}
+          <div className="connection-status">
+            <div className={`connection-icon ${
+              connectingWallet ? 'connecting' : 
+              walletConnected ? 'connected' : 'disconnected'
+            }`} style={{ animation: 'none' }}>
+              {connectingWallet ? (
+                <FaClock />
+              ) : walletConnected ? (
+                <FaShieldAlt />
+              ) : (
+                <FaExclamationTriangle />
+              )}
+            </div>
+            <div className="connection-info">
+              <div className="connection-title">
+                {connectingWallet ? 'Connecting to MetaMask...' :
+                 walletConnected ? 'Blockchain Connected' : 'Blockchain Connection Required'}
               </div>
-              <div>
-                <div style={{ color: 'white', fontWeight: '600', marginBottom: '0.25rem', fontSize: '1.1rem' }}>
-                  Blockchain Status
-                </div>
-                <div style={{ color: 'var(--light-gray)', fontSize: '0.875rem' }}>
-                  {walletConnected 
-                    ? `Connected: ${walletAddress.substring(0, 6)}...${walletAddress.substring(38)}`
-                    : 'Connect your wallet to access blockchain features'
-                  }
-                </div>
-                {walletConnected && blockchainCredentials.length > 0 && (
-                  <div style={{ color: 'var(--teal)', fontSize: '0.875rem', marginTop: '0.25rem' }}>
-                    {blockchainCredentials.length} blockchain credential{blockchainCredentials.length !== 1 ? 's' : ''} found
-                  </div>
-                )}
+              <div className="connection-description">
+                {connectingWallet ? 'Please approve the connection in your MetaMask wallet' :
+                 walletConnected ? 'Your wallet is connected and ready for blockchain operations' :
+                 'Connect your MetaMask wallet to access blockchain-verified credentials'}
               </div>
+              {walletConnected && walletAddress && (
+                <div className="connection-address">
+                  {walletAddress.substring(0, 8)}...{walletAddress.substring(34)}
+                </div>
+              )}
             </div>
             
-            {!walletConnected && (
-              <button
-                className="btn-primary"
-                onClick={connectWallet}
-                disabled={connectingWallet}
-                style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.75rem 1.5rem' }}
-              >
-                {connectingWallet ? (
-                  <>
-                    <div className="spinner" style={{ width: '1rem', height: '1rem' }} />
-                    Connecting...
-                  </>
-                ) : (
-                  <>
-                    <FaShieldAlt />
-                    Connect MetaMask
-                  </>
-                )}
-              </button>
-            )}
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 'var(--space-md)' }}>
+              {walletConnected ? (
+                <div className="status-indicator status-connected">
+                  <FaShieldAlt size={12} />
+                  Connected
+                </div>
+              ) : connectingWallet ? (
+                <div className="status-indicator status-pending">
+                  <FaClock size={12} />
+                  Connecting
+                </div>
+              ) : (
+                <div className="status-indicator status-disconnected">
+                  <FaExclamationTriangle size={12} />
+                  Disconnected
+                </div>
+              )}
+              
+              {!walletConnected && !connectingWallet && (
+                <button
+                  className="btn btn-primary"
+                  onClick={connectWallet}
+                  disabled={connectingWallet}
+                  style={{ minWidth: '160px' }}
+                >
+                  <FaShieldAlt />
+                  Connect MetaMask
+                </button>
+              )}
+            </div>
           </div>
+          
+          {walletConnected && blockchainCredentials.length > 0 && (
+            <div style={{ 
+              marginTop: 'var(--space-lg)',
+              padding: 'var(--space-lg)',
+              background: 'rgba(16, 185, 129, 0.05)',
+              border: '1px solid rgba(16, 185, 129, 0.2)',
+              borderRadius: 'var(--radius-lg)'
+            }}>
+              <div style={{ 
+                display: 'flex', 
+                alignItems: 'center', 
+                gap: 'var(--space-sm)',
+                color: 'var(--success)',
+                fontSize: 'var(--text-sm)',
+                fontWeight: '500'
+              }}>
+                <FaCertificate />
+                {blockchainCredentials.length} blockchain credential{blockchainCredentials.length !== 1 ? 's' : ''} verified
+              </div>
+            </div>
+          )}
+          
+          {/* Enhanced Error Display */}
+          {walletError && (
+            <div className="error-container">
+              <div className="error-header">
+                <FaExclamationTriangle className="error-icon" />
+                <div className="error-title">{walletError.title}</div>
+              </div>
+              <div className="error-message">{walletError.message}</div>
+              <div className="error-actions">
+                {walletError.actionUrl ? (
+                  <motion.a
+                    href={walletError.actionUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn btn-primary"
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                  >
+                    {walletError.action}
+                  </motion.a>
+                ) : (
+                  <motion.button
+                    className="btn btn-primary"
+                    onClick={() => {
+                      setWalletError(null)
+                      if (walletError.type === 'user_rejected' || walletError.type === 'unexpected_error') {
+                        connectWallet()
+                      }
+                    }}
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                  >
+                    {walletError.action || 'Try Again'}
+                  </motion.button>
+                )}
+                <motion.button
+                  className="btn btn-ghost"
+                  onClick={() => setWalletError(null)}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  Dismiss
+                </motion.button>
+              </div>
+            </div>
+          )}
         </motion.div>
 
         {/* Stats Cards */}
-        <div className="stats-grid">
+        <div className="grid grid-cols-3">
           <StatCard
             icon={FaCertificate}
             title="Credentials Earned"
             value={stats.credentials}
             description="Verified blockchain credentials"
-            color="from var(--teal) to var(--blue)"
-            delay={0}
+            trend={{ direction: 'up', value: '+2 this month' }}
+            delay={0.15}
           />
           <StatCard
             icon={FaTasks}
             title="Tasks Completed"
             value={stats.tasks}
             description="Projects submitted for review"
-            color="from var(--blue) to var(--purple)"
+            trend={{ direction: 'up', value: '+5 this week' }}
             delay={0.2}
           />
           <StatCard
@@ -437,41 +429,49 @@ const Dashboard = () => {
             title="Progress Score"
             value={`${stats.progress}%`}
             description="Overall skill development"
-            color="from var(--purple) to var(--green)"
-            delay={0.4}
+            trend={{ direction: 'up', value: '+12% this month' }}
+            delay={0.25}
           />
         </div>
 
         {/* Main Content Grid */}
-        <div className="main-grid">
+        <div className="grid grid-cols-2">
           {/* Progress Chart */}
-          <div>
-            <ProgressChart data={chartData} />
-          </div>
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.4, delay: 0.3 }}
+          >
+            <div className="card">
+              <ProgressChart data={chartData} title="Your Learning Progress" />
+            </div>
+          </motion.div>
 
           {/* Quick Actions */}
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, delay: 0.6 }}
+            transition={{ duration: 0.4, delay: 0.35 }}
           >
-            <div className="glass-card" style={{ padding: '1.5rem' }}>
-              <h2 className="heading-h2" style={{ marginBottom: '1.5rem' }}>Quick Actions</h2>
-              <div className="quick-actions">
+            <div className="card">
+              <h2 className="text-lg font-semibold text-primary" style={{ marginBottom: 'var(--space-xl)' }}>Quick Actions</h2>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-md)' }}>
                 <button 
-                  className="action-button"
+                  className="btn btn-secondary"
                   onClick={() => window.location.href = '/tasks'}
+                  style={{ justifyContent: 'flex-start' }}
                 >
                   <FaPlus /> Submit New Task
                 </button>
                 <button 
-                  className="action-button"
+                  className="btn btn-secondary"
                   onClick={() => window.location.href = '/verification'}
+                  style={{ justifyContent: 'flex-start' }}
                 >
                   <FaEye /> Verify Credential
                 </button>
                 <button 
-                  className="action-button"
+                  className="btn btn-ghost"
                   onClick={() => {
                     const csvData = credentials.map(c => 
                       `${c.skill},${c.blockchain_id},${new Date(c.created_at || Date.now()).toDateString()}`
@@ -484,6 +484,7 @@ const Dashboard = () => {
                     a.click()
                     console.log('Credentials exported successfully!')
                   }}
+                  style={{ justifyContent: 'flex-start' }}
                 >
                   <FaDownload /> Export Credentials
                 </button>
@@ -496,43 +497,75 @@ const Dashboard = () => {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.8 }}
-          style={{ marginTop: '2rem' }}
+          transition={{ duration: 0.4, delay: 0.4 }}
         >
-          <h2 className="heading-h2" style={{ marginBottom: '1.5rem' }}>Your Credentials</h2>
-          
-          {credentials.length > 0 ? (
-            <div className="credentials-grid">
-              {credentials.slice(0, 6).map((credential, index) => (
-                <CredentialCard
-                  key={credential.id}
-                  credential={credential}
-                  onView={handleViewCredential}
-                  onShare={handleShareCredential}
-                />
-              ))}
+          <div className="card">
+            <div style={{ marginBottom: 'var(--space-xl)' }}>
+              <h2 className="text-xl font-semibold text-primary" style={{ marginBottom: 'var(--space-sm)' }}>Your Credentials</h2>
+              <p className="text-sm text-tertiary">Your latest verified achievements</p>
             </div>
-          ) : (
-            <div className="glass-card empty-state">
-              <div className="empty-icon">
-                <FaCertificate />
+            
+            {credentials.length > 0 ? (
+              <div className="grid grid-cols-2">
+                {credentials.slice(0, 6).map((credential, index) => (
+                  <div key={credential.id} className="credential-card">
+                    <div className="credential-header">
+                      <div className="credential-info">
+                        <div className="credential-skill">{credential.skill}</div>
+                        <div className="credential-meta">
+                          <FaCertificate size={12} />
+                          <span>{credential.issuer || 'SkillCert'}</span>
+                        </div>
+                        <div className="credential-meta">
+                          <span>{new Date(credential.created_at || credential.dateIssued).toLocaleDateString()}</span>
+                        </div>
+                      </div>
+                      <div className="credential-actions">
+                        <button 
+                          className="btn btn-sm btn-ghost" 
+                          onClick={() => handleViewCredential(credential)}
+                          title="View credential"
+                        >
+                          <FaEye size={12} />
+                        </button>
+                        <button 
+                          className="btn btn-sm btn-ghost" 
+                          onClick={() => handleShareCredential(credential)}
+                          title="Share credential"
+                        >
+                          <FaShare size={12} />
+                        </button>
+                        <button className="btn btn-sm btn-ghost" title="Download credential">
+                          <FaDownload size={12} />
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
               </div>
-              <h3 className="heading-h2" style={{ marginBottom: '1rem' }}>No Credentials Yet</h3>
-              <p className="body-text" style={{ marginBottom: '1.5rem' }}>
-                Start by submitting tasks to earn your first blockchain-verified credential!
-              </p>
-              <Button 
-                variant="neumorphic" 
-                size="lg"
-                onClick={() => window.location.href = '/tasks'}
-              >
-                Submit Your First Task
-              </Button>
-            </div>
-          )}
+            ) : (
+              <div className="empty-state">
+                <div className="empty-icon">
+                  <FaCertificate />
+                </div>
+                <h3 className="empty-title">No Credentials Yet</h3>
+                <p className="empty-description">
+                  Start by submitting tasks to earn your first blockchain-verified credential!
+                </p>
+                <button 
+                  className="btn btn-primary"
+                  onClick={() => window.location.href = '/tasks'}
+                  style={{ marginTop: 'var(--space-lg)' }}
+                >
+                  <FaPlus />
+                  Submit Your First Task
+                </button>
+              </div>
+            )}
+          </div>
         </motion.div>
       </div>
-    </div>
+    </>
   )
 }
 

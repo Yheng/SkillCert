@@ -13,7 +13,9 @@ import {
   FaUser,
   FaHashtag,
   FaGlobe,
-  FaDownload
+  FaDownload,
+  FaCalendarAlt,
+  FaExclamationTriangle
 } from 'react-icons/fa'
 import { MdVerified } from 'react-icons/md'
 import blockchainService from '../api/blockchain'
@@ -153,28 +155,18 @@ Verify at: ${window.location.origin}/verification`], { type: 'text/plain' })
   }
 
   return (
-    <div className="tasks-container">
-      <div className="tasks-content">
+    <>
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          style={{ textAlign: 'center', marginBottom: '3rem' }}
+          className="page-header"
         >
-          <div style={{ 
-            display: 'inline-block',
-            padding: '1rem',
-            background: 'rgba(45, 212, 191, 0.1)',
-            borderRadius: '50%',
-            marginBottom: '1.5rem'
-          }}>
-            <FaShieldAlt style={{ fontSize: '3rem', color: 'var(--teal)' }} />
-          </div>
-          <h1 className="heading-h1" style={{ marginBottom: '1rem' }}>
+          <h1 className="page-title">
             Credential Verification
           </h1>
-          <p className="subheading" style={{ maxWidth: '600px', margin: '0 auto' }}>
+          <p className="page-subtitle">
             Instantly verify blockchain-secured credentials and view tamper-proof evidence
           </p>
         </motion.div>
@@ -184,116 +176,110 @@ Verify at: ${window.location.origin}/verification`], { type: 'text/plain' })
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.1 }}
-          className="glass-card"
-          style={{ padding: '1.5rem', marginBottom: '2rem', maxWidth: '800px', margin: '0 auto 2rem auto' }}
+          className="connection-card"
+          style={{ marginBottom: '2rem' }}
         >
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-              <div style={{
-                width: '40px',
-                height: '40px',
-                borderRadius: '50%',
-                background: walletConnected ? 'var(--green)' : 'var(--orange)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: 'white'
-              }}>
-                {walletConnected ? '✓' : '!'}
+          <div className="connection-status">
+            <div className={`connection-icon ${walletConnected ? 'connected' : 'disconnected'}`}>
+              {walletConnected ? <FaShieldAlt /> : <FaExclamationTriangle />}
+            </div>
+            <div className="connection-info">
+              <div className="connection-title">
+                {walletConnected ? 'Blockchain Connected' : 'Blockchain Connection'}
               </div>
-              <div>
-                <div style={{ color: 'white', fontWeight: '600', marginBottom: '0.25rem' }}>
-                  Blockchain Connection
-                </div>
-                <div style={{ color: 'var(--light-gray)', fontSize: '0.875rem' }}>
-                  {walletConnected 
-                    ? `Connected: ${walletAddress.substring(0, 6)}...${walletAddress.substring(38)}`
-                    : 'Connect wallet for full blockchain verification'
-                  }
-                </div>
+              <div className="connection-description">
+                {walletConnected 
+                  ? 'Your wallet is connected and ready for verification'
+                  : 'Connect wallet for full blockchain verification'
+                }
               </div>
+              {walletConnected && walletAddress && (
+                <div className="connection-address">
+                  {walletAddress.substring(0, 8)}...{walletAddress.substring(34)}
+                </div>
+              )}
             </div>
             
-            {!walletConnected && (
-              <button
-                className="btn-primary"
-                onClick={connectWallet}
-                disabled={connectingWallet}
-                style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}
-              >
-                {connectingWallet ? (
-                  <>
-                    <div className="spinner" style={{ width: '1rem', height: '1rem' }} />
-                    Connecting...
-                  </>
-                ) : (
-                  <>
-                    <FaShieldAlt />
-                    Connect MetaMask
-                  </>
-                )}
-              </button>
-            )}
+            <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-md)' }}>
+              {walletConnected ? (
+                <div className="status-indicator status-connected">
+                  <FaShieldAlt size={12} />
+                  Connected
+                </div>
+              ) : (
+                <button
+                  className="btn btn-primary"
+                  onClick={connectWallet}
+                  disabled={connectingWallet}
+                  style={{ minWidth: '160px' }}
+                >
+                  {connectingWallet ? (
+                    <>
+                      <div className="spinner" style={{ width: '1rem', height: '1rem' }} />
+                      Connecting...
+                    </>
+                  ) : (
+                    <>
+                      <FaShieldAlt />
+                      Connect MetaMask
+                    </>
+                  )}
+                </button>
+              )}
+            </div>
           </div>
         </motion.div>
 
-        {/* Search Section */}
+        {/* Enhanced Search Section */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="glass-card"
-          style={{ padding: '2rem', marginBottom: '2rem', maxWidth: '800px', margin: '0 auto 2rem auto' }}
+          className="card"
+          style={{ marginBottom: '2rem', maxWidth: '800px', margin: '0 auto 2rem auto' }}
         >
-          {/* Search Type Selector */}
-          <div style={{ 
-            display: 'flex', 
-            justifyContent: 'center', 
-            marginBottom: '2rem',
-            gap: '1rem'
-          }}>
-            <button
-              className={`neumorphic-btn ${searchType === 'credential' ? 'primary' : ''}`}
+          {/* Enhanced Search Type Selector */}
+          <div className="tab-navigation">
+            <motion.button
+              className={`tab-button ${searchType === 'credential' ? 'active' : ''}`}
               onClick={() => setSearchType('credential')}
-              style={{ 
-                padding: '0.75rem 1.5rem',
-                background: searchType === 'credential' ? 'linear-gradient(45deg, var(--teal), var(--blue))' : '#1e293b',
-                color: searchType === 'credential' ? 'white' : 'var(--blue)'
-              }}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
             >
-              <FaCertificate style={{ marginRight: '0.5rem' }} />
-              Verify Credential
-            </button>
-            <button
-              className={`neumorphic-btn ${searchType === 'user' ? 'primary' : ''}`}
+              <div className="tab-content">
+                <FaCertificate />
+                Verify Credential
+              </div>
+            </motion.button>
+            <motion.button
+              className={`tab-button ${searchType === 'user' ? 'active' : ''}`}
               onClick={() => setSearchType('user')}
-              style={{ 
-                padding: '0.75rem 1.5rem',
-                background: searchType === 'user' ? 'linear-gradient(45deg, var(--teal), var(--blue))' : '#1e293b',
-                color: searchType === 'user' ? 'white' : 'var(--blue)'
-              }}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
             >
-              <FaUser style={{ marginRight: '0.5rem' }} />
-              Find Professional
-            </button>
+              <div className="tab-content">
+                <FaUser />
+                Find Professional
+              </div>
+            </motion.button>
           </div>
 
-          <form onSubmit={handleSearch}>
-            <div style={{ display: 'flex', gap: '1rem', alignItems: 'flex-end' }}>
-              <div style={{ flex: 1 }}>
-                <label className="form-label">
-                  {searchType === 'credential' ? (
-                    <>
-                      <FaHashtag style={{ marginRight: '0.5rem' }} />
-                      Credential ID or Blockchain Hash
-                    </>
-                  ) : (
-                    <>
-                      <FaUser style={{ marginRight: '0.5rem' }} />
-                      Email Address or Wallet
-                    </>
-                  )}
-                </label>
+          <form onSubmit={handleSearch} style={{ marginTop: 'var(--space-xl)' }}>
+            <div className="form-field">
+              <div className="form-field-label">
+                {searchType === 'credential' ? (
+                  <>
+                    <FaHashtag />
+                    Credential ID or Blockchain Hash
+                  </>
+                ) : (
+                  <>
+                    <FaUser />
+                    Professional Email or Wallet Address
+                  </>
+                )}
+              </div>
+              <div style={{ display: 'flex', gap: 'var(--space-md)' }}>
                 <input
                   type="text"
                   value={searchQuery}
@@ -303,39 +289,41 @@ Verify at: ${window.location.origin}/verification`], { type: 'text/plain' })
                       ? 'Enter credential ID (e.g., 0x1234...abcd)' 
                       : 'Enter professional\'s email or wallet address'
                   }
-                  className="form-input"
-                  style={{ fontSize: '1rem' }}
+                  className="form-field-input"
+                  style={{ flex: 1 }}
                   disabled={loading}
                 />
+                <motion.button
+                  type="submit"
+                  className="btn btn-primary"
+                  disabled={loading || !searchQuery.trim()}
+                  whileHover={!loading ? { scale: 1.02 } : {}}
+                  whileTap={!loading ? { scale: 0.98 } : {}}
+                  style={{ 
+                    padding: 'var(--space-lg) var(--space-xl)',
+                    minWidth: '120px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: 'var(--space-sm)'
+                  }}
+                >
+                  {loading ? (
+                    <div className="spinner" />
+                  ) : (
+                    <>
+                      <FaSearch />
+                      Verify
+                    </>
+                  )}
+                </motion.button>
               </div>
-              <motion.button
-                type="submit"
-                className="btn-primary"
-                disabled={loading || !searchQuery.trim()}
-                whileHover={!loading ? { scale: 1.02 } : {}}
-                whileTap={!loading ? { scale: 0.98 } : {}}
-                style={{ 
-                  padding: '0.875rem 1.5rem',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '0.5rem'
-                }}
-              >
-                {loading ? (
-                  <div className="spinner" style={{ 
-                    width: '1.25rem', 
-                    height: '1.25rem',
-                    border: '2px solid transparent',
-                    borderTop: '2px solid white',
-                    borderRadius: '50%'
-                  }} />
-                ) : (
-                  <>
-                    <FaSearch />
-                    Verify
-                  </>
-                )}
-              </motion.button>
+              <div className="form-validation" style={{ color: 'var(--text-muted)' }}>
+                {searchType === 'credential' 
+                  ? 'Enter the unique credential ID or blockchain hash to verify its authenticity'
+                  : 'Search for a professional\'s verified credentials using their email or wallet address'
+                }
+              </div>
             </div>
           </form>
         </motion.div>
@@ -349,7 +337,8 @@ Verify at: ${window.location.origin}/verification`], { type: 'text/plain' })
             style={{ maxWidth: '900px', margin: '0 auto' }}
           >
             {searchResult.type === 'credential' ? (
-              <div className="glass-card" style={{ padding: '2rem' }}>
+              <div className="card">
+                
                 {/* Verification Status */}
                 <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
                   <animated.div style={verificationAnimation}>
@@ -381,51 +370,73 @@ Verify at: ${window.location.origin}/verification`], { type: 'text/plain' })
                   </p>
                 </div>
 
-                {/* Credential Details */}
+                {/* Enhanced Credential Details */}
                 {searchResult.isValid && searchResult.data && (
-                  <div style={{ 
-                    background: 'rgba(16, 185, 129, 0.1)',
-                    border: '1px solid rgba(16, 185, 129, 0.3)',
-                    borderRadius: '12px',
-                    padding: '2rem'
+                  <div className="data-card" style={{ 
+                    background: 'rgba(16, 185, 129, 0.05)',
+                    border: '1px solid rgba(16, 185, 129, 0.2)'
                   }}>
-                    <div style={{ 
-                      display: 'grid', 
-                      gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', 
-                      gap: '1.5rem' 
-                    }}>
-                      <div>
-                        <div className="form-label" style={{ marginBottom: '0.5rem' }}>
-                          <FaCertificate style={{ marginRight: '0.5rem' }} />
-                          Skill Verified
-                        </div>
-                        <div className="stat-title">{searchResult.data.skill}</div>
+                    <div className="data-card-header">
+                      <div className="data-card-title" style={{ color: 'var(--success)' }}>
+                        Verified Credential Details
                       </div>
-                      <div>
-                        <div className="form-label" style={{ marginBottom: '0.5rem' }}>
-                          <FaUser style={{ marginRight: '0.5rem' }} />
-                          Credential Holder
-                        </div>
-                        <div className="stat-title">{searchResult.data.user_name || 'Verified Professional'}</div>
+                      <div className="status-indicator status-verified">
+                        <FaShieldAlt size={12} />
+                        Verified
                       </div>
-                      <div>
-                        <div className="form-label" style={{ marginBottom: '0.5rem' }}>
-                          <FaClock style={{ marginRight: '0.5rem' }} />
-                          Issue Date
+                    </div>
+                    
+                    <div className="data-card-content">
+                      <div className="analytics-grid">
+                        <div className="metric-card">
+                          <div className="metric-header">
+                            <div className="metric-icon" style={{ background: 'linear-gradient(135deg, var(--brand-primary), var(--brand-secondary))' }}>
+                              <FaCertificate />
+                            </div>
+                          </div>
+                          <div className="metric-value">{searchResult.data.skill}</div>
+                          <div className="metric-label">Verified Skill</div>
                         </div>
-                        <div className="stat-title">
-                          {new Date(searchResult.data.created_at).toLocaleDateString()}
+                        
+                        <div className="metric-card">
+                          <div className="metric-header">
+                            <div className="metric-icon" style={{ background: 'linear-gradient(135deg, var(--brand-secondary), var(--brand-purple))' }}>
+                              <FaUser />
+                            </div>
+                          </div>
+                          <div className="metric-value" style={{ fontSize: 'var(--text-lg)' }}>
+                            {searchResult.data.user_name || 'Professional'}
+                          </div>
+                          <div className="metric-label">Credential Holder</div>
+                        </div>
+                        
+                        <div className="metric-card">
+                          <div className="metric-header">
+                            <div className="metric-icon" style={{ background: 'linear-gradient(135deg, var(--brand-orange), var(--warning))' }}>
+                              <FaClock />
+                            </div>
+                          </div>
+                          <div className="metric-value" style={{ fontSize: 'var(--text-lg)' }}>
+                            {new Date(searchResult.data.created_at).toLocaleDateString()}
+                          </div>
+                          <div className="metric-label">Issue Date</div>
                         </div>
                       </div>
-                      <div>
-                        <div className="form-label" style={{ marginBottom: '0.5rem' }}>
-                          <FaHashtag style={{ marginRight: '0.5rem' }} />
-                          Blockchain ID
+                      
+                      <div style={{ 
+                        marginTop: 'var(--space-xl)',
+                        padding: 'var(--space-lg)',
+                        background: 'var(--bg-elevated)',
+                        borderRadius: 'var(--radius-lg)',
+                        border: '1px solid var(--border-secondary)'
+                      }}>
+                        <div className="form-field-label">
+                          <FaHashtag />
+                          Blockchain Verification Hash
                         </div>
-                        <div style={{ 
-                          fontSize: '0.875rem', 
-                          color: 'var(--teal)', 
-                          fontFamily: 'monospace',
+                        <div className="connection-address" style={{ 
+                          marginTop: 'var(--space-sm)',
+                          fontSize: 'var(--text-sm)',
                           wordBreak: 'break-all'
                         }}>
                           {searchResult.data.blockchain_id}
@@ -466,9 +477,9 @@ Verify at: ${window.location.origin}/verification`], { type: 'text/plain' })
                 )}
               </div>
             ) : (
-              /* User Credentials Display */
+              /* Enhanced User Credentials Display */
               <div>
-                <div className="glass-card" style={{ padding: '2rem', marginBottom: '2rem' }}>
+                <div className="card" style={{ marginBottom: '2rem' }}>
                   <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
                     <animated.div style={verificationAnimation}>
                       {searchResult.isValid ? (
@@ -501,50 +512,57 @@ Verify at: ${window.location.origin}/verification`], { type: 'text/plain' })
                   </div>
                 </div>
 
-                {/* Credentials Grid */}
+                {/* Enhanced Credentials Grid */}
                 {searchResult.isValid && searchResult.data && (
-                  <div className="credentials-grid">
+                  <div className="analytics-grid">
                     {searchResult.data.map((credential, index) => (
                       <motion.div
                         key={credential.id}
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.4, delay: index * 0.1 }}
-                        className="credential-card"
+                        className="data-card"
                       >
-                        <div className="credential-header">
-                          <div className="credential-info">
-                            <h3 className="credential-skill">{credential.skill}</h3>
-                            <p className="credential-meta">
+                        <div className="data-card-header">
+                          <div>
+                            <div className="data-card-title">{credential.skill}</div>
+                            <div className="data-card-meta">
+                              <FaCalendarAlt />
                               Verified: {new Date(credential.created_at).toLocaleDateString()}
-                            </p>
-                            <p className="credential-meta">
+                              <span>•</span>
+                              <FaHashtag />
                               ID: #{credential.id}
-                            </p>
+                            </div>
                           </div>
-                          <div style={{ marginLeft: '1rem' }}>
-                            <FaCheckCircle style={{ 
-                              fontSize: '2rem', 
-                              color: 'var(--green)' 
-                            }} />
+                          <div className="status-indicator status-verified">
+                            <FaCheckCircle size={12} />
+                            Verified
                           </div>
                         </div>
                         
-                        <div className="credential-actions">
-                          <button
-                            className="btn-primary"
-                            onClick={() => setSearchQuery(credential.blockchain_id)}
-                            style={{ 
-                              flex: 1, 
-                              fontSize: '0.875rem',
-                              display: 'flex',
-                              alignItems: 'center',
-                              justifyContent: 'center',
-                              gap: '0.5rem'
+                        <div className="data-card-content">
+                          <p style={{ 
+                            color: 'var(--text-secondary)', 
+                            fontSize: 'var(--text-sm)',
+                            marginBottom: 'var(--space-lg)'
+                          }}>
+                            This credential has been verified on the blockchain and is tamper-proof.
+                          </p>
+                        </div>
+                        
+                        <div className="data-card-actions">
+                          <motion.button
+                            className="btn btn-primary btn-full"
+                            onClick={() => {
+                              setSearchType('credential')
+                              setSearchQuery(credential.blockchain_id)
                             }}
+                            whileHover={{ scale: 1.02 }}
+                            whileTap={{ scale: 0.98 }}
                           >
-                            <FaSearch /> View Details
-                          </button>
+                            <FaSearch />
+                            View Full Details
+                          </motion.button>
                         </div>
                       </motion.div>
                     ))}
@@ -605,8 +623,7 @@ Verify at: ${window.location.origin}/verification`], { type: 'text/plain' })
             </div>
           </motion.div>
         )}
-      </div>
-    </div>
+    </>
   )
 }
 

@@ -5,6 +5,7 @@ import {
   FaPlus,
   FaTasks,
   FaUsers,
+  FaUser,
   FaCertificate,
   FaEye,
   FaCheck,
@@ -187,42 +188,30 @@ const EducatorDashboard = () => {
 
   const StatCard = ({ icon: Icon, title, value, color, trend }) => (
     <motion.div
-      className="glass-card"
-      style={{ padding: '1.5rem' }}
+      className="stat-card"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6 }}
     >
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <div>
-          <div className="stat-value" style={{ color }}>{value}</div>
-          <div className="stat-title">{title}</div>
-          {trend && (
-            <div style={{ fontSize: '0.75rem', color: 'var(--green)', marginTop: '0.25rem' }}>
-              ↗ {trend}% this month
-            </div>
-          )}
+      <animated.div style={floatAnimation}>
+        <div className="stat-icon" style={{ background: `linear-gradient(45deg, ${color || 'var(--teal)'}, ${color || 'var(--blue)'})` }}>
+          <Icon />
         </div>
-        <animated.div style={floatAnimation}>
-          <div style={{
-            padding: '1rem',
-            borderRadius: '50%',
-            background: `${color}20`,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center'
-          }}>
-            <Icon style={{ fontSize: '1.5rem', color }} />
-          </div>
-        </animated.div>
-      </div>
+      </animated.div>
+      <div className="stat-value">{value}</div>
+      <div className="stat-title">{title}</div>
+      {trend && (
+        <div className="stat-description" style={{ color: 'var(--green)' }}>
+          ↗ {trend}% this month
+        </div>
+      )}
     </motion.div>
   )
 
   if (loading) {
     return (
-      <div className="dashboard-container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <div className="spinner" style={{ width: '3rem', height: '3rem' }} />
+      <div className="loading-spinner">
+        <div className="spinner" />
       </div>
     )
   }
@@ -235,9 +224,8 @@ const EducatorDashboard = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          style={{ marginBottom: '2rem' }}
         >
-          <h1 className="heading-h1" style={{ marginBottom: '0.5rem' }}>
+          <h1 className="heading-h1 gradient-text">
             Educator Dashboard
           </h1>
           <p className="subheading">
@@ -246,7 +234,7 @@ const EducatorDashboard = () => {
         </motion.div>
 
         {/* Tab Navigation */}
-        <div style={{ display: 'flex', gap: '1rem', marginBottom: '2rem', overflowX: 'auto' }}>
+        <div className="flex gap-2 sm:gap-4 mb-6 sm:mb-8 overflow-x-auto pb-2 -mx-4 px-4 sm:mx-0 sm:px-0">
           {[
             { id: 'overview', label: 'Overview', icon: FaChartLine },
             { id: 'tasks', label: 'My Tasks', icon: FaTasks },
@@ -255,14 +243,12 @@ const EducatorDashboard = () => {
           ].map(tab => (
             <motion.button
               key={tab.id}
-              className={`action-button ${activeTab === tab.id ? 'active' : ''}`}
+              className={`px-4 py-2 sm:px-6 sm:py-3 rounded-lg font-semibold flex items-center gap-2 transition-all duration-300 whitespace-nowrap text-sm sm:text-base ${
+                activeTab === tab.id 
+                  ? 'bg-gradient-to-r from-teal-500 to-blue-500 text-white' 
+                  : 'bg-gray-800/50 text-teal-400 border border-teal-500/30 hover:bg-gray-700/50'
+              }`}
               onClick={() => setActiveTab(tab.id)}
-              style={{
-                background: activeTab === tab.id ? 'linear-gradient(45deg, var(--teal), var(--blue))' : 'rgba(31, 42, 68, 0.8)',
-                color: activeTab === tab.id ? 'white' : 'var(--teal)',
-                border: activeTab === tab.id ? 'none' : '2px solid var(--teal)',
-                whiteSpace: 'nowrap'
-              }}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
             >
@@ -276,7 +262,7 @@ const EducatorDashboard = () => {
         {activeTab === 'overview' && (
           <div>
             {/* Stats Grid */}
-            <div className="main-grid" style={{ marginBottom: '2rem' }}>
+            <div className="stats-grid">
               <StatCard
                 icon={FaTasks}
                 title="Total Tasks"
@@ -311,35 +297,31 @@ const EducatorDashboard = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.3 }}
-              className="glass-card"
-              style={{ padding: '2rem', marginBottom: '2rem' }}
+              className="bg-white/10 backdrop-blur-md border border-white/20 rounded-xl sm:rounded-2xl p-4 sm:p-6 lg:p-8 shadow-2xl mb-6 sm:mb-8"
             >
-              <h2 className="heading-h2" style={{ marginBottom: '1.5rem' }}>Quick Actions</h2>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem' }}>
+              <h2 className="text-xl sm:text-2xl font-bold text-white mb-4 sm:mb-6">Quick Actions</h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
                 <motion.button
-                  className="btn-primary"
+                  className="bg-gradient-to-r from-teal-500 to-blue-500 hover:from-teal-600 hover:to-blue-600 text-white px-4 py-3 sm:px-6 sm:py-4 rounded-lg font-semibold flex items-center gap-3 transition-all duration-300 justify-center text-sm sm:text-base"
                   onClick={() => setShowTaskModal(true)}
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}
                 >
                   <FaPlus /> Create New Task
                 </motion.button>
                 <motion.button
-                  className="btn-secondary"
+                  className="bg-gray-800/50 hover:bg-gray-700/50 text-white px-4 py-3 sm:px-6 sm:py-4 rounded-lg font-semibold flex items-center gap-3 transition-all duration-300 border border-gray-600/30 hover:border-teal-500/50 justify-center text-sm sm:text-base"
                   onClick={() => setActiveTab('submissions')}
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}
                 >
                   <FaEye /> Review Submissions
                 </motion.button>
                 <motion.button
-                  className="btn-secondary"
+                  className="bg-gray-800/50 hover:bg-gray-700/50 text-white px-4 py-3 sm:px-6 sm:py-4 rounded-lg font-semibold flex items-center gap-3 transition-all duration-300 border border-gray-600/30 hover:border-teal-500/50 justify-center text-sm sm:text-base col-span-1 sm:col-span-2 lg:col-span-1"
                   onClick={() => setActiveTab('students')}
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}
                 >
                   <FaUsers /> Manage Students
                 </motion.button>

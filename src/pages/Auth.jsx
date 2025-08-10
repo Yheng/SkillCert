@@ -208,54 +208,53 @@ const Auth = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="glass-card"
-            style={{ padding: '2.5rem' }}
+            className="card"
           >
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-xl)' }}>
               {/* Name Field (Signup only) */}
               {isSignup && (
-                <div className="form-group">
-                  <label className="form-label">
-                    <FaUser style={{ marginRight: '0.5rem' }} />
+                <div className="form-field">
+                  <div className="form-field-label">
+                    <FaUser />
                     Full Name
-                  </label>
+                  </div>
                   <input
                     type="text"
                     name="name"
                     value={formData.name}
                     onChange={handleInputChange}
                     placeholder="Enter your full name"
-                    className="form-input"
+                    className="form-field-input"
                     disabled={loading}
                   />
-                  {errors.name && <div className="form-error">{errors.name}</div>}
+                  {errors.name && <div className="form-validation error">{errors.name}</div>}
                 </div>
               )}
 
               {/* Email Field */}
-              <div className="form-group">
-                <label className="form-label">
-                  <FaEnvelope style={{ marginRight: '0.5rem' }} />
+              <div className="form-field">
+                <div className="form-field-label">
+                  <FaEnvelope />
                   Email Address
-                </label>
+                </div>
                 <input
                   type="email"
                   name="email"
                   value={formData.email}
                   onChange={handleInputChange}
                   placeholder="Enter your email"
-                  className="form-input"
+                  className="form-field-input"
                   disabled={loading}
                 />
-                {errors.email && <div className="form-error">{errors.email}</div>}
+                {errors.email && <div className="form-validation error">{errors.email}</div>}
               </div>
 
               {/* Password Field */}
-              <div className="form-group">
-                <label className="form-label">
-                  <FaLock style={{ marginRight: '0.5rem' }} />
+              <div className="form-field">
+                <div className="form-field-label">
+                  <FaLock />
                   Password
-                </label>
+                </div>
                 <div style={{ position: 'relative' }}>
                   <input
                     type={showPassword ? 'text' : 'password'}
@@ -263,7 +262,7 @@ const Auth = () => {
                     value={formData.password}
                     onChange={handleInputChange}
                     placeholder="Enter your password"
-                    className="form-input"
+                    className="form-field-input"
                     style={{ paddingRight: '3rem' }}
                     disabled={loading}
                   />
@@ -277,23 +276,23 @@ const Auth = () => {
                       transform: 'translateY(-50%)',
                       background: 'none',
                       border: 'none',
-                      color: 'var(--light-gray)',
+                      color: 'var(--text-muted)',
                       cursor: 'pointer'
                     }}
                   >
                     {showPassword ? <FaEyeSlash /> : <FaEye />}
                   </button>
                 </div>
-                {errors.password && <div className="form-error">{errors.password}</div>}
+                {errors.password && <div className="form-validation error">{errors.password}</div>}
               </div>
 
               {/* Role Selection (Signup only) */}
               {isSignup && (
-                <div className="form-group">
-                  <label className="form-label">
-                    <FaUserTie style={{ marginRight: '0.5rem' }} />
+                <div className="form-field">
+                  <div className="form-field-label">
+                    <FaUserTie />
                     I am a...
-                  </label>
+                  </div>
                   <div style={{ 
                     display: 'grid', 
                     gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', 
@@ -325,19 +324,19 @@ const Auth = () => {
                       </motion.button>
                     ))}
                   </div>
-                  {errors.role && <div className="form-error">{errors.role}</div>}
+                  {errors.role && <div className="form-validation error">{errors.role}</div>}
                 </div>
               )}
 
               {/* Primary Skill (Freelancer only) */}
               {isSignup && formData.role === 'freelancer' && (
-                <div className="form-group">
-                  <label className="form-label">Primary Skill</label>
+                <div className="form-field">
+                  <div className="form-field-label">Primary Skill</div>
                   <select
                     name="primarySkill"
                     value={formData.primarySkill}
                     onChange={handleInputChange}
-                    className="form-input"
+                    className="form-field-input"
                     disabled={loading}
                   >
                     <option value="">Select your primary skill</option>
@@ -353,21 +352,20 @@ const Auth = () => {
                     <option value="Content Writing">Content Writing</option>
                     <option value="Other">Other</option>
                   </select>
-                  {errors.primarySkill && <div className="form-error">{errors.primarySkill}</div>}
+                  {errors.primarySkill && <div className="form-validation error">{errors.primarySkill}</div>}
                 </div>
               )}
 
               {/* Submit Button */}
               <motion.button
                 type="submit"
-                className="btn-primary"
+                className="btn btn-primary btn-full btn-lg"
                 style={{ 
-                  width: '100%', 
-                  marginTop: '1.5rem',
+                  marginTop: 'var(--space-xl)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  gap: '0.5rem'
+                  gap: 'var(--space-sm)'
                 }}
                 disabled={loading}
                 whileHover={!loading ? { scale: 1.02 } : {}}

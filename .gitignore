@@ -25,3 +25,6 @@ dist-ssr
 
 exclude
 exclude/*
+
+.claude
+.claude/*

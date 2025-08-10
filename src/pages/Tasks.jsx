@@ -22,7 +22,10 @@ import {
   FaTimes,
   FaShieldAlt,
   FaExclamationTriangle,
-  FaEthereum
+  FaEthereum,
+  FaCalendarAlt,
+  FaPlus,
+  FaTasks
 } from "react-icons/fa"
 import backendService from "../api/backend"
 import blockchainService from "../api/blockchain"
@@ -71,12 +74,13 @@ const FileUpload = ({ onFileChange, file, error }) => {
   }
 
   return (
-    <div className="space-y-4">
-      <Label>Project Files (Optional)</Label>
+    <div className="form-field">
+      <div className="form-field-label">
+        <FaFile />
+        Project Files (Optional)
+      </div>
       <motion.div
-        className={`border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-all duration-300 ${
-          file ? 'border-skill-teal bg-skill-teal/10' : 'border-white/30 hover:border-skill-teal hover:bg-white/5'
-        } ${error ? 'border-red-500' : ''}`}
+        className={`file-upload-area ${file ? 'has-file' : ''} ${error ? 'error' : ''}`}
         onDragOver={handleDragOver}
         onDragEnter={handleDragEnter}
         onDragLeave={handleDragLeave}
@@ -94,37 +98,36 @@ const FileUpload = ({ onFileChange, file, error }) => {
         />
         
         {file ? (
-          <div className="space-y-2">
-            <FaFile className="text-4xl text-skill-teal mx-auto" />
-            <div>
-              <p className="text-white font-medium">{file.name}</p>
-              <p className="text-gray-400 text-sm">{formatFileSize(file.size)}</p>
+          <div className="file-upload-content">
+            <FaFile className="file-upload-icon uploaded" />
+            <div className="file-upload-info">
+              <div className="file-name">{file.name}</div>
+              <div className="file-size">{formatFileSize(file.size)}</div>
             </div>
-            <Button
+            <button
               type="button"
-              variant="outline"
-              size="sm"
+              className="btn btn-sm btn-ghost"
               onClick={(e) => {
                 e.stopPropagation()
                 onFileChange(null)
               }}
             >
               Remove
-            </Button>
+            </button>
           </div>
         ) : (
-          <div className="space-y-2">
-            <FaUpload className="text-4xl text-gray-400 mx-auto" />
-            <div>
-              <p className="text-white">Drop files here or click to browse</p>
-              <p className="text-gray-400 text-sm">
+          <div className="file-upload-content">
+            <FaUpload className="file-upload-icon" />
+            <div className="file-upload-info">
+              <div className="file-upload-title">Drop files here or click to browse</div>
+              <div className="file-upload-description">
                 Supports: PDF, DOC, images, code files, archives (max 10MB)
-              </p>
+              </div>
             </div>
           </div>
         )}
       </motion.div>
-      {error && <p className="text-red-400 text-sm">{error}</p>}
+      {error && <div className="form-validation error">{error}</div>}
     </div>
   )
 }
@@ -173,7 +176,7 @@ const TaskCard = ({ task, onStatusUpdate, walletConnected }) => {
   }
 
   return (
-    <GlassCard className="p-6 hover:scale-105 transition-transform duration-300">
+    <div className="card" style={{ transition: 'transform 0.3s ease' }}>
       <div className="flex items-start justify-between mb-4">
         <div className="flex-1">
           <h3 className="text-xl font-bold text-white mb-2">{task.title}</h3>
@@ -192,32 +195,30 @@ const TaskCard = ({ task, onStatusUpdate, walletConnected }) => {
         </div>
       </div>
       
-      <div className="mt-4 flex gap-2">
+      <div style={{ marginTop: 'var(--space-lg)', display: 'flex', gap: 'var(--space-sm)' }}>
         {task.ipfs_hash && (
-          <Button 
-            size="sm" 
-            variant="glass"
+          <button 
+            className="btn btn-sm btn-secondary"
             onClick={() => {
               window.open(`https://gateway.pinata.cloud/ipfs/${task.ipfs_hash}`, '_blank')
             }}
           >
-            <FaFile className="mr-2" /> View on IPFS
-          </Button>
+            <FaFile /> View on IPFS
+          </button>
         )}
         
         {task.blockchain_id && walletConnected && (
-          <Button 
-            size="sm" 
-            variant="glass"
+          <button 
+            className="btn btn-sm btn-secondary"
             onClick={() => {
               AuroraToast.success(`Credential issued on blockchain: ${task.blockchain_id}`)
             }}
           >
-            <FaEthereum className="mr-2" /> View on Blockchain
-          </Button>
+            <FaEthereum /> View on Blockchain
+          </button>
         )}
       </div>
-    </GlassCard>
+    </div>
   )
 }
 
@@ -349,7 +350,7 @@ const Tasks = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 py-8">
+    <>
       {showConfetti && (
         <Confetti
           width={width}
@@ -359,8 +360,6 @@ const Tasks = () => {
           colors={['#2DD4BF', '#3B82F6', '#8B5CF6', '#10B981']}
         />
       )}
-      
-      <div className="max-w-6xl mx-auto px-4">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -383,70 +382,82 @@ const Tasks = () => {
           transition={{ duration: 0.6, delay: 0.1 }}
           className="mb-8"
         >
-          <GlassCard className="p-6">
-            <div className="flex items-center justify-between flex-wrap gap-4">
-              <div className="flex items-center space-x-4">
-                <div className={`w-12 h-12 rounded-full flex items-center justify-center text-xl ${
-                  walletConnected ? 'bg-green-500' : 'bg-orange-500'
-                }`}>
-                  {walletConnected ? <FaShieldAlt /> : <FaExclamationTriangle />}
+          <div className="connection-card">
+            <div className="connection-status">
+              <div className={`connection-icon ${walletConnected ? 'connected' : 'disconnected'}`}>
+                {walletConnected ? <FaShieldAlt /> : <FaExclamationTriangle />}
+              </div>
+              <div className="connection-info">
+                <div className="connection-title">
+                  {walletConnected ? 'Blockchain Connected' : 'Blockchain Connection'}
                 </div>
-                <div>
-                  <div className="text-white font-semibold text-lg">
-                    Blockchain Connection
-                  </div>
-                  <div className="text-gray-400 text-sm">
-                    {walletConnected 
-                      ? `Connected: ${walletAddress.substring(0, 6)}...${walletAddress.substring(38)}`
-                      : 'Connect wallet to enable blockchain credential verification'
-                    }
-                  </div>
+                <div className="connection-description">
+                  {walletConnected 
+                    ? 'Your wallet is connected and ready for task verification'
+                    : 'Connect wallet to enable blockchain credential verification'
+                  }
                 </div>
+                {walletConnected && walletAddress && (
+                  <div className="connection-address">
+                    {walletAddress.substring(0, 8)}...{walletAddress.substring(34)}
+                  </div>
+                )}
               </div>
               
               {!walletConnected && (
-                <NeumorphicButton
-                  variant="primary"
+                <button
+                  className="btn btn-primary"
                   onClick={connectWallet}
                   disabled={connectingWallet}
+                  style={{ minWidth: '160px' }}
                 >
                   {connectingWallet ? (
                     <>
-                      <div className="animate-spin rounded-full h-4 w-4 border-t-2 border-b-2 border-white mr-2"></div>
+                      <div className="spinner" style={{ width: '1rem', height: '1rem' }} />
                       Connecting...
                     </>
                   ) : (
                     <>
-                      <FaShieldAlt className="mr-2" />
+                      <FaShieldAlt />
                       Connect MetaMask
                     </>
                   )}
-                </NeumorphicButton>
+                </button>
               )}
             </div>
-          </GlassCard>
+          </div>
         </motion.div>
 
-        {/* Tabs */}
+        {/* Enhanced Tab Navigation */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.6, delay: 0.2 }}
           className="mb-8"
         >
-          <div className="flex space-x-4">
-            <NeumorphicButton
-              variant={activeTab === 'submit' ? 'primary' : 'default'}
+          <div className="tab-navigation">
+            <motion.button
+              className={`tab-button ${activeTab === 'submit' ? 'active' : ''}`}
               onClick={() => setActiveTab('submit')}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
             >
-              Submit Task
-            </NeumorphicButton>
-            <NeumorphicButton
-              variant={activeTab === 'history' ? 'primary' : 'default'}
+              <div className="tab-content">
+                <FaPlus />
+                Submit Task
+              </div>
+            </motion.button>
+            <motion.button
+              className={`tab-button ${activeTab === 'history' ? 'active' : ''}`}
               onClick={() => setActiveTab('history')}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
             >
-              Task History
-            </NeumorphicButton>
+              <div className="tab-content">
+                <FaTasks />
+                Task History
+              </div>
+            </motion.button>
           </div>
         </motion.div>
 
@@ -456,49 +467,91 @@ const Tasks = () => {
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6 }}
-            className="grid grid-cols-1 lg:grid-cols-3 gap-8"
+            style={{ display: 'grid', gridTemplateColumns: '1fr 400px', gap: 'var(--space-2xl)', alignItems: 'start' }}
+            className="max-lg:grid-cols-1"
           >
             {/* Task Form */}
-            <div className="lg:col-span-2">
-              <GlassCard className="p-8">
-                <h2 className="text-2xl font-bold text-gradient mb-6">Submit New Task</h2>
+            <div>
+              <div className="card">
+                <div className="card-header">
+                  <div className="card-title">Submit New Task</div>
+                  <div className="card-subtitle">Share your project to earn blockchain-verified credentials</div>
+                </div>
                 
-                <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-                  <div>
-                    <Label htmlFor="title">Task Title</Label>
-                    <Input
+                <div className="card-body">
+                  <form onSubmit={handleSubmit(onSubmit)} style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-xl)' }}>
+                  <div className="form-field">
+                    <div className="form-field-label">
+                      <FaFile />
+                      Task Title *
+                    </div>
+                    <input
+                      type="text"
                       id="title"
                       placeholder="e.g., React E-commerce Website"
                       {...register("title", { required: "Task title is required" })}
-                      className="mt-1"
+                      className={`form-field-input ${errors.title ? 'error' : ''}`}
                     />
                     {errors.title && (
-                      <p className="text-red-400 text-sm mt-1">{errors.title.message}</p>
+                      <div className="form-validation error">
+                        <FaTimes />
+                        {errors.title.message}
+                      </div>
                     )}
                   </div>
 
-                  <div>
-                    <Label htmlFor="description">Description</Label>
+                  <div className="form-field">
+                    <div className="form-field-label">
+                      <FaCode />
+                      Project Description
+                    </div>
                     <textarea
                       id="description"
                       rows={4}
-                      placeholder="Describe your project, technologies used, and key features..."
+                      placeholder="Describe your project, technologies used, key features, and what makes it special..."
                       {...register("description")}
-                      className="mt-1 w-full px-3 py-2 bg-white/5 border border-white/20 rounded-md text-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-skill-teal focus:border-transparent resize-none"
+                      className="form-field-input"
+                      style={{ 
+                        resize: 'vertical', 
+                        minHeight: '120px',
+                        fontFamily: 'inherit'
+                      }}
                     />
+                    <div className="form-validation" style={{ color: 'var(--text-muted)' }}>
+                      Provide details about your implementation, challenges solved, and technologies used
+                    </div>
                   </div>
 
-                  <div>
-                    <Label htmlFor="skill">Skill Category</Label>
-                    <Input
+                  <div className="form-field">
+                    <div className="form-field-label">
+                      <FaBrain />
+                      Skill Category *
+                    </div>
+                    <input
+                      type="text"
                       id="skill"
                       placeholder="e.g., React Development"
                       value={selectedSkill}
                       {...register("skill", { required: "Skill is required" })}
-                      className="mt-1"
+                      className={`form-field-input ${errors.skill ? 'error' : selectedSkill ? 'success' : ''}`}
+                      readOnly={!!selectedSkill}
                     />
                     {errors.skill && (
-                      <p className="text-red-400 text-sm mt-1">{errors.skill.message}</p>
+                      <div className="form-validation error">
+                        <FaTimes />
+                        {errors.skill.message}
+                      </div>
+                    )}
+                    {selectedSkill && (
+                      <div className="form-validation success">
+                        <FaCheckCircle />
+                        Selected: {selectedSkill}
+                      </div>
+                    )}
+                    {!selectedSkill && (
+                      <div className="form-validation" style={{ color: 'var(--text-muted)' }}>
+                        Select a skill from the suggestions or type your own
+                      </div>
                     )}
                   </div>
 
@@ -508,34 +561,76 @@ const Tasks = () => {
                     error={null}
                   />
 
-                  <NeumorphicButton
+                  <motion.button
                     type="submit"
-                    size="lg"
-                    variant="primary"
+                    className="btn btn-primary btn-lg btn-full"
                     disabled={loading}
-                    className="w-full"
+                    whileHover={!loading ? { scale: 1.02 } : {}}
+                    whileTap={!loading ? { scale: 0.98 } : {}}
+                    style={{
+                      marginTop: 'var(--space-xl)',
+                      padding: 'var(--space-lg) var(--space-2xl)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: 'var(--space-sm)'
+                    }}
                   >
-                    {loading ? 'Submitting...' : 'Submit Task'}
-                  </NeumorphicButton>
-                </form>
-              </GlassCard>
+                    {loading ? (
+                      <>
+                        <div className="spinner" />
+                        Submitting Task...
+                      </>
+                    ) : (
+                      <>
+                        <FaRocket />
+                        Submit Task for Review
+                      </>
+                    )}
+                  </motion.button>
+                  </form>
+                </div>
+              </div>
             </div>
 
-            {/* Skill Suggestions */}
+            {/* Enhanced Skill Selection */}
             <div>
-              <GlassCard className="p-6">
-                <h3 className="text-xl font-bold text-gradient mb-4">Popular Skills</h3>
-                <div className="space-y-3">
-                  {skillSuggestions.map((suggestion, index) => (
-                    <SkillSuggestion
-                      key={suggestion.skill}
-                      {...suggestion}
-                      onClick={handleSkillSelect}
-                      isSelected={selectedSkill === suggestion.skill}
-                    />
-                  ))}
+              <div className="card">
+                <div className="card-header">
+                  <div className="card-title">Popular Skills</div>
+                  <div className="card-subtitle">Select a skill category that matches your project</div>
                 </div>
-              </GlassCard>
+                <div className="card-body">
+                  <div className="skill-grid">
+                  {skillSuggestions.map((suggestion, index) => (
+                    <motion.div
+                      key={suggestion.skill}
+                      className={`skill-card ${selectedSkill === suggestion.skill ? 'selected' : ''}`}
+                      onClick={() => handleSkillSelect(suggestion.skill)}
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.3, delay: index * 0.1 }}
+                    >
+                      <div className="skill-card-header">
+                        <div 
+                          className="skill-card-icon" 
+                          style={{ background: `linear-gradient(135deg, ${suggestion.color})` }}
+                        >
+                          <suggestion.icon />
+                        </div>
+                        <div className="skill-card-badge">
+                          ✓
+                        </div>
+                      </div>
+                      <div className="skill-card-title">{suggestion.skill}</div>
+                      <div className="skill-card-description">{suggestion.description}</div>
+                    </motion.div>
+                  ))}
+                  </div>
+                </div>
+              </div>
             </div>
           </motion.div>
         )}
@@ -554,37 +649,104 @@ const Tasks = () => {
                 <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-skill-teal"></div>
               </div>
             ) : tasks.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 gap-6">
                 {tasks.map((task) => (
-                  <TaskCard
+                  <motion.div
                     key={task.id}
-                    task={task}
-                    onStatusUpdate={() => loadTasks()}
-                    walletConnected={walletConnected}
-                  />
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="data-card"
+                  >
+                    <div className="data-card-header">
+                      <div>
+                        <div className="data-card-title">{task.title}</div>
+                        <div className="data-card-meta">
+                          <FaCode />
+                          {task.skill}
+                          <span>•</span>
+                          <FaCalendarAlt />
+                          {new Date(task.created_at).toLocaleDateString()}
+                        </div>
+                      </div>
+                      <div className={`status-indicator ${
+                        task.status === 'approved' ? 'status-verified' :
+                        task.status === 'pending' ? 'status-pending' : 'status-disconnected'
+                      }`}>
+                        {task.status === 'approved' ? <FaCheckCircle size={12} /> :
+                         task.status === 'pending' ? <FaClock size={12} /> : <FaTimes size={12} />}
+                        {task.status}
+                      </div>
+                    </div>
+                    
+                    <div className="data-card-content">
+                      <p style={{ 
+                        color: 'var(--text-secondary)', 
+                        fontSize: 'var(--text-sm)',
+                        lineHeight: '1.6',
+                        marginBottom: 'var(--space-lg)'
+                      }}>
+                        {task.description || 'No description provided'}
+                      </p>
+                      
+                      {(task.ipfs_hash || task.blockchain_id) && (
+                        <div style={{ 
+                          display: 'flex', 
+                          gap: 'var(--space-sm)',
+                          flexWrap: 'wrap'
+                        }}>
+                          {task.ipfs_hash && (
+                            <motion.button 
+                              className="btn btn-sm btn-secondary"
+                              onClick={() => {
+                                window.open(`https://gateway.pinata.cloud/ipfs/${task.ipfs_hash}`, '_blank')
+                              }}
+                              whileHover={{ scale: 1.05 }}
+                              whileTap={{ scale: 0.95 }}
+                            >
+                              <FaFile /> View Files
+                            </motion.button>
+                          )}
+                          
+                          {task.blockchain_id && walletConnected && (
+                            <motion.button 
+                              className="btn btn-sm btn-secondary"
+                              onClick={() => {
+                                AuroraToast.success(`Credential issued on blockchain: ${task.blockchain_id}`)
+                              }}
+                              whileHover={{ scale: 1.05 }}
+                              whileTap={{ scale: 0.95 }}
+                            >
+                              <FaEthereum /> Blockchain
+                            </motion.button>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  </motion.div>
                 ))}
               </div>
             ) : (
-              <GlassCard className="p-12 text-center">
-                <div className="w-24 h-24 mx-auto mb-6 bg-gradient-to-r from-skill-teal to-skill-blue rounded-full flex items-center justify-center opacity-50">
-                  <FaRocket className="text-4xl text-white" />
+              <div className="empty-state">
+                <div className="empty-icon">
+                  <FaRocket />
                 </div>
-                <h3 className="text-2xl font-bold text-white mb-4">No Tasks Yet</h3>
-                <p className="text-gray-400 mb-6">
+                <h3 className="empty-title">No Tasks Yet</h3>
+                <p className="empty-description">
                   Submit your first task to start earning credentials!
                 </p>
-                <NeumorphicButton 
-                  variant="primary"
+                <button 
+                  className="btn btn-primary"
                   onClick={() => setActiveTab('submit')}
+                  style={{ marginTop: 'var(--space-lg)' }}
                 >
+                  <FaPlus />
                   Submit Your First Task
-                </NeumorphicButton>
-              </GlassCard>
+                </button>
+              </div>
             )}
           </motion.div>
         )}
-      </div>
-    </div>
+    </>
   )
 }
 

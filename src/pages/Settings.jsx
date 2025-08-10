@@ -13,7 +13,9 @@ import {
   FaSave,
   FaEye,
   FaEyeSlash,
-  FaCog
+  FaCog,
+  FaBrain,
+  FaTimes
 } from 'react-icons/fa'
 import backendService from '../api/backend'
 
@@ -241,19 +243,18 @@ const Settings = () => {
   ]
 
   return (
-    <div className="dashboard-container">
-      <div className="dashboard-content">
+    <>
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          style={{ marginBottom: '2rem' }}
+          className="page-header"
         >
-          <h1 className="heading-h1" style={{ marginBottom: '0.5rem' }}>
+          <h1 className="page-title">
             Account Settings
           </h1>
-          <p className="subheading">
+          <p className="page-subtitle">
             Manage your profile, security, and preferences
           </p>
         </motion.div>
@@ -277,34 +278,42 @@ const Settings = () => {
           </motion.div>
         )}
 
-        <div className="main-grid">
-          {/* Tabs Sidebar */}
+        <div style={{ display: 'grid', gridTemplateColumns: '300px 1fr', gap: 'var(--space-2xl)', alignItems: 'start' }} className="max-lg:grid-cols-1">
+          {/* Enhanced Tabs Sidebar */}
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6 }}
-            className="glass-card"
-            style={{ padding: '1.5rem', height: 'fit-content' }}
+            className="card"
+            style={{ height: 'fit-content' }}
           >
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-              {tabs.map(tab => (
-                <motion.button
-                  key={tab.id}
-                  className={`action-button ${activeTab === tab.id ? 'active' : ''}`}
-                  onClick={() => setActiveTab(tab.id)}
-                  style={{
-                    justifyContent: 'flex-start',
-                    background: activeTab === tab.id ? 'linear-gradient(45deg, var(--teal), var(--blue))' : 'rgba(31, 42, 68, 0.8)',
-                    color: activeTab === tab.id ? 'white' : 'var(--teal)',
-                    border: activeTab === tab.id ? 'none' : '2px solid var(--teal)'
-                  }}
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                >
-                  <tab.icon />
-                  {tab.label}
-                </motion.button>
-              ))}
+            <div className="card-header">
+              <div className="card-title" style={{ fontSize: 'var(--text-lg)' }}>Account Settings</div>
+              <div className="card-subtitle">Manage your preferences</div>
+            </div>
+            
+            <div className="card-body">
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-sm)' }}>
+                {tabs.map(tab => (
+                  <motion.button
+                    key={tab.id}
+                    className={`tab-button ${activeTab === tab.id ? 'active' : ''}`}
+                    onClick={() => setActiveTab(tab.id)}
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    style={{
+                      width: '100%',
+                      justifyContent: 'flex-start',
+                      textAlign: 'left'
+                    }}
+                  >
+                    <div className="tab-content">
+                      <tab.icon />
+                      {tab.label}
+                    </div>
+                  </motion.button>
+                ))}
+              </div>
             </div>
           </motion.div>
 
@@ -314,54 +323,72 @@ const Settings = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4 }}
-            className="glass-card"
-            style={{ padding: '2rem' }}
+            className="card"
           >
-            {/* Profile Tab */}
+            {/* Enhanced Profile Tab */}
             {activeTab === 'profile' && (
               <div>
-                <h2 className="heading-h2" style={{ marginBottom: '2rem' }}>Profile Information</h2>
-                <form onSubmit={handleProfileSubmit}>
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1.5rem' }}>
-                    <div className="form-group">
-                      <label className="form-label">
-                        <FaUser style={{ marginRight: '0.5rem' }} />
-                        Full Name
-                      </label>
+                <div className="card-header">
+                  <div className="card-title">Profile Information</div>
+                  <div className="card-subtitle">Manage your personal information and professional details</div>
+                </div>
+                
+                <form onSubmit={handleProfileSubmit} className="card-body">
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 'var(--space-xl)' }}>
+                    <div className="form-field">
+                      <div className="form-field-label">
+                        <FaUser />
+                        Full Name *
+                      </div>
                       <input
                         type="text"
                         name="name"
                         value={formData.name}
                         onChange={(e) => handleInputChange(e, 'profile')}
-                        className="form-input"
+                        className={`form-field-input ${errors.name ? 'error' : ''}`}
                         disabled={loading}
+                        placeholder="Enter your full name"
                       />
-                      {errors.name && <div className="form-error">{errors.name}</div>}
+                      {errors.name && (
+                        <div className="form-validation error">
+                          <FaTimes />
+                          {errors.name}
+                        </div>
+                      )}
                     </div>
 
-                    <div className="form-group">
-                      <label className="form-label">
-                        <FaEnvelope style={{ marginRight: '0.5rem' }} />
-                        Email Address
-                      </label>
+                    <div className="form-field">
+                      <div className="form-field-label">
+                        <FaEnvelope />
+                        Email Address *
+                      </div>
                       <input
                         type="email"
                         name="email"
                         value={formData.email}
                         onChange={(e) => handleInputChange(e, 'profile')}
-                        className="form-input"
+                        className={`form-field-input ${errors.email ? 'error' : ''}`}
                         disabled={loading}
+                        placeholder="Enter your email address"
                       />
-                      {errors.email && <div className="form-error">{errors.email}</div>}
+                      {errors.email && (
+                        <div className="form-validation error">
+                          <FaTimes />
+                          {errors.email}
+                        </div>
+                      )}
                     </div>
 
-                    <div className="form-group">
-                      <label className="form-label">Primary Skill</label>
+                    <div className="form-field">
+                      <div className="form-field-label">
+                        <FaBrain />
+                        Primary Skill
+                      </div>
                       <select
                         name="primarySkill"
                         value={formData.primarySkill}
                         onChange={(e) => handleInputChange(e, 'profile')}
-                        className="form-input"
+                        className="form-field-input"
                         disabled={loading}
                       >
                         <option value="">Select your primary skill</option>
@@ -375,72 +402,86 @@ const Settings = () => {
                       </select>
                     </div>
 
-                    <div className="form-group">
-                      <label className="form-label">
-                        <FaGlobe style={{ marginRight: '0.5rem' }} />
+                    <div className="form-field">
+                      <div className="form-field-label">
+                        <FaGlobe />
                         Location
-                      </label>
+                      </div>
                       <input
                         type="text"
                         name="location"
                         value={formData.location}
                         onChange={(e) => handleInputChange(e, 'profile')}
-                        className="form-input"
+                        className="form-field-input"
                         placeholder="City, Country"
                         disabled={loading}
                       />
                     </div>
                   </div>
 
-                  <div className="form-group">
-                    <label className="form-label">Bio</label>
+                  <div className="form-field">
+                    <div className="form-field-label">
+                      <FaUser />
+                      Bio
+                    </div>
                     <textarea
                       name="bio"
                       value={formData.bio}
                       onChange={(e) => handleInputChange(e, 'profile')}
-                      className="form-textarea"
+                      className="form-field-input"
                       placeholder="Tell others about yourself and your expertise..."
                       rows="4"
                       disabled={loading}
+                      style={{ 
+                        resize: 'vertical', 
+                        minHeight: '120px',
+                        fontFamily: 'inherit'
+                      }}
                     />
                   </div>
 
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1.5rem' }}>
-                    <div className="form-group">
-                      <label className="form-label">Website</label>
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 'var(--space-xl)' }}>
+                    <div className="form-field">
+                      <div className="form-field-label">
+                        <FaGlobe />
+                        Website
+                      </div>
                       <input
                         type="url"
                         name="website"
                         value={formData.website}
                         onChange={(e) => handleInputChange(e, 'profile')}
-                        className="form-input"
+                        className="form-field-input"
                         placeholder="https://yourwebsite.com"
                         disabled={loading}
                       />
                     </div>
 
-                    <div className="form-group">
-                      <label className="form-label">LinkedIn</label>
+                    <div className="form-field">
+                      <div className="form-field-label">
+                        <FaUser />
+                        LinkedIn
+                      </div>
                       <input
                         type="url"
                         name="linkedin"
                         value={formData.linkedin}
                         onChange={(e) => handleInputChange(e, 'profile')}
-                        className="form-input"
+                        className="form-field-input"
                         placeholder="https://linkedin.com/in/username"
                         disabled={loading}
                       />
                     </div>
                   </div>
 
-                  <div style={{ display: 'flex', gap: '1rem', marginTop: '2rem' }}>
+                  <div style={{ display: 'flex', gap: 'var(--space-md)', marginTop: 'var(--space-2xl)' }}>
                     <motion.button
                       type="submit"
-                      className="btn-primary"
+                      className="btn btn-primary"
                       disabled={loading}
                       whileHover={!loading ? { scale: 1.02 } : {}}
                       whileTap={!loading ? { scale: 0.98 } : {}}
-                      style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}
+                      style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-sm)' }}
                     >
                       {loading ? (
                         <div className="spinner" style={{ width: '1rem', height: '1rem' }} />
@@ -459,7 +500,11 @@ const Settings = () => {
             {/* Security Tab */}
             {activeTab === 'security' && (
               <div>
-                <h2 className="heading-h2" style={{ marginBottom: '2rem' }}>Security Settings</h2>
+                <div className="card-header">
+                  <div className="card-title">Security Settings</div>
+                  <div className="card-subtitle">Manage your password and account security</div>
+                </div>
+                <div className="card-body">
                 <form onSubmit={handlePasswordSubmit}>
                   <div className="form-group">
                     <label className="form-label">
@@ -524,14 +569,14 @@ const Settings = () => {
                     {errors.confirmPassword && <div className="form-error">{errors.confirmPassword}</div>}
                   </div>
 
-                  <div style={{ display: 'flex', gap: '1rem', marginTop: '2rem' }}>
+                  <div style={{ display: 'flex', gap: 'var(--space-md)', marginTop: 'var(--space-2xl)' }}>
                     <motion.button
                       type="submit"
-                      className="btn-primary"
+                      className="btn btn-primary"
                       disabled={loading}
                       whileHover={!loading ? { scale: 1.02 } : {}}
                       whileTap={!loading ? { scale: 0.98 } : {}}
-                      style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}
+                      style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-sm)' }}
                     >
                       {loading ? (
                         <div className="spinner" style={{ width: '1rem', height: '1rem' }} />
@@ -544,14 +589,19 @@ const Settings = () => {
 
                   {errors.submit && <div className="form-error" style={{ marginTop: '1rem' }}>{errors.submit}</div>}
                 </form>
+                </div>
               </div>
             )}
 
             {/* Preferences Tab */}
             {activeTab === 'preferences' && (
               <div>
-                <h2 className="heading-h2" style={{ marginBottom: '2rem' }}>Notification Preferences</h2>
-                <form onSubmit={handlePreferencesSubmit}>
+                <div className="card-header">
+                  <div className="card-title">Notification Preferences</div>
+                  <div className="card-subtitle">Customize how and when you receive notifications</div>
+                </div>
+                <div className="card-body">
+                  <form onSubmit={handlePreferencesSubmit}>
                   <div style={{ display: 'grid', gap: '1.5rem' }}>
                     {[
                       { key: 'emailNotifications', label: 'Email Notifications', icon: FaEnvelope, desc: 'Receive important updates via email' },
@@ -578,67 +628,32 @@ const Settings = () => {
                             </div>
                           </div>
                         </div>
-                        <label style={{ 
-                          position: 'relative',
-                          display: 'inline-block',
-                          width: '3rem',
-                          height: '1.5rem'
-                        }}>
+                        <div className="toggle-switch">
                           <input
                             type="checkbox"
                             name={pref.key}
                             checked={preferences[pref.key]}
                             onChange={(e) => handleInputChange(e, 'preferences')}
-                            style={{ opacity: 0, width: 0, height: 0 }}
                             disabled={loading}
+                            className="toggle-input"
+                            id={`toggle-${pref.key}`}
                           />
-                          <span style={{
-                            position: 'absolute',
-                            cursor: 'pointer',
-                            top: 0,
-                            left: 0,
-                            right: 0,
-                            bottom: 0,
-                            backgroundColor: preferences[pref.key] ? 'var(--teal)' : '#374151',
-                            transition: '0.4s',
-                            borderRadius: '1.5rem',
-                            '::before': {
-                              position: 'absolute',
-                              content: '',
-                              height: '1.125rem',
-                              width: '1.125rem',
-                              left: preferences[pref.key] ? '1.375rem' : '0.1875rem',
-                              bottom: '0.1875rem',
-                              backgroundColor: 'white',
-                              transition: '0.4s',
-                              borderRadius: '50%'
-                            }
-                          }}>
-                            <div style={{
-                              position: 'absolute',
-                              content: '',
-                              height: '1.125rem',
-                              width: '1.125rem',
-                              left: preferences[pref.key] ? '1.375rem' : '0.1875rem',
-                              bottom: '0.1875rem',
-                              backgroundColor: 'white',
-                              transition: '0.4s',
-                              borderRadius: '50%'
-                            }} />
-                          </span>
-                        </label>
+                          <label htmlFor={`toggle-${pref.key}`} className="toggle-label">
+                            <span className="toggle-slider" />
+                          </label>
+                        </div>
                       </div>
                     ))}
                   </div>
 
-                  <div style={{ display: 'flex', gap: '1rem', marginTop: '2rem' }}>
+                  <div style={{ display: 'flex', gap: 'var(--space-md)', marginTop: 'var(--space-2xl)' }}>
                     <motion.button
                       type="submit"
-                      className="btn-primary"
+                      className="btn btn-primary"
                       disabled={loading}
                       whileHover={!loading ? { scale: 1.02 } : {}}
                       whileTap={!loading ? { scale: 0.98 } : {}}
-                      style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}
+                      style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-sm)' }}
                     >
                       {loading ? (
                         <div className="spinner" style={{ width: '1rem', height: '1rem' }} />
@@ -650,14 +665,19 @@ const Settings = () => {
                   </div>
 
                   {errors.submit && <div className="form-error" style={{ marginTop: '1rem' }}>{errors.submit}</div>}
-                </form>
+                  </form>
+                </div>
               </div>
             )}
 
             {/* Privacy Tab */}
             {activeTab === 'privacy' && (
               <div>
-                <h2 className="heading-h2" style={{ marginBottom: '2rem' }}>Privacy & Data</h2>
+                <div className="card-header">
+                  <div className="card-title">Privacy & Data</div>
+                  <div className="card-subtitle">Control your privacy settings and data management</div>
+                </div>
+                <div className="card-body">
                 
                 <div style={{ display: 'grid', gap: '2rem' }}>
                   {/* Public Profile Settings */}
@@ -670,38 +690,19 @@ const Settings = () => {
                           Allow others to find and view your credentials
                         </div>
                       </div>
-                      <label style={{ position: 'relative', display: 'inline-block', width: '3rem', height: '1.5rem' }}>
+                      <div className="toggle-switch">
                         <input
                           type="checkbox"
                           name="publicProfile"
                           checked={preferences.publicProfile}
                           onChange={(e) => handleInputChange(e, 'preferences')}
-                          style={{ opacity: 0, width: 0, height: 0 }}
+                          className="toggle-input"
+                          id="toggle-publicProfile"
                         />
-                        <span style={{
-                          position: 'absolute',
-                          cursor: 'pointer',
-                          top: 0,
-                          left: 0,
-                          right: 0,
-                          bottom: 0,
-                          backgroundColor: preferences.publicProfile ? 'var(--teal)' : '#374151',
-                          transition: '0.4s',
-                          borderRadius: '1.5rem'
-                        }}>
-                          <div style={{
-                            position: 'absolute',
-                            content: '',
-                            height: '1.125rem',
-                            width: '1.125rem',
-                            left: preferences.publicProfile ? '1.375rem' : '0.1875rem',
-                            bottom: '0.1875rem',
-                            backgroundColor: 'white',
-                            transition: '0.4s',
-                            borderRadius: '50%'
-                          }} />
-                        </span>
-                      </label>
+                        <label htmlFor="toggle-publicProfile" className="toggle-label">
+                          <span className="toggle-slider" />
+                        </label>
+                      </div>
                     </div>
                   </div>
 
@@ -764,12 +765,12 @@ const Settings = () => {
                     </motion.button>
                   </div>
                 </div>
+                </div>
               </div>
             )}
           </motion.div>
         </div>
-      </div>
-    </div>
+    </>
   )
 }
 

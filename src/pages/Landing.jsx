@@ -101,29 +101,278 @@ const Landing = () => {
       </nav>
 
       {/* Hero Section */}
-      <section className="landing-hero" style={{ paddingTop: '6rem' }}>
-        {/* Animated 3D blockchain nodes */}
-        <animated.div
+      <section className="landing-hero" style={{ paddingTop: '6rem', position: 'relative', overflow: 'hidden' }}>
+        {/* Blockchain Network Background */}
+        <svg 
           style={{
             position: 'absolute',
-            top: '20%',
-            left: '10%',
-            ...nodeAnimation
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            zIndex: -1,
+            opacity: 0.1
           }}
+          viewBox="0 0 1200 800"
         >
-          <FaCube style={{ fontSize: '3rem', color: 'rgba(45, 212, 191, 0.3)' }} />
-        </animated.div>
-        <animated.div
+          {/* Blockchain Network Pattern */}
+          <defs>
+            <pattern id="blockchainPattern" x="0" y="0" width="120" height="120" patternUnits="userSpaceOnUse">
+              <circle cx="60" cy="60" r="8" fill="url(#nodeGradient)" opacity="0.6"/>
+              <line x1="60" y1="60" x2="120" y2="60" stroke="url(#connectionGradient)" strokeWidth="1" opacity="0.4"/>
+              <line x1="60" y1="60" x2="60" y2="120" stroke="url(#connectionGradient)" strokeWidth="1" opacity="0.4"/>
+              <line x1="60" y1="60" x2="105" y2="105" stroke="url(#connectionGradient)" strokeWidth="1" opacity="0.3"/>
+            </pattern>
+            
+            <linearGradient id="nodeGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#2DD4BF"/>
+              <stop offset="100%" stopColor="#3B82F6"/>
+            </linearGradient>
+            
+            <linearGradient id="connectionGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#2DD4BF"/>
+              <stop offset="50%" stopColor="#8B5CF6"/>
+              <stop offset="100%" stopColor="#3B82F6"/>
+            </linearGradient>
+            
+            <filter id="glow">
+              <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+              <feMerge> 
+                <feMergeNode in="coloredBlur"/>
+                <feMergeNode in="SourceGraphic"/>
+              </feMerge>
+            </filter>
+          </defs>
+          
+          <rect width="100%" height="100%" fill="url(#blockchainPattern)"/>
+          
+          {/* Floating Credential Badges */}
+          <motion.g
+            animate={{
+              y: [-10, 10, -10],
+              rotate: [0, 5, 0]
+            }}
+            transition={{
+              duration: 6,
+              repeat: Infinity,
+              ease: "easeInOut"
+            }}
+          >
+            <circle cx="200" cy="150" r="25" fill="rgba(45, 212, 191, 0.2)" filter="url(#glow)"/>
+            <path 
+              d="M190 145 L195 155 L210 140" 
+              stroke="#2DD4BF" 
+              strokeWidth="3" 
+              fill="none"
+              filter="url(#glow)"
+            />
+          </motion.g>
+          
+          <motion.g
+            animate={{
+              y: [10, -10, 10],
+              rotate: [0, -5, 0]
+            }}
+            transition={{
+              duration: 8,
+              repeat: Infinity,
+              ease: "easeInOut",
+              delay: 1
+            }}
+          >
+            <circle cx="1000" cy="200" r="20" fill="rgba(139, 92, 246, 0.2)" filter="url(#glow)"/>
+            <rect x="990" y="190" width="20" height="20" fill="none" stroke="#8B5CF6" strokeWidth="2" filter="url(#glow)"/>
+          </motion.g>
+          
+          <motion.g
+            animate={{
+              y: [-5, 15, -5],
+              rotate: [0, 3, 0]
+            }}
+            transition={{
+              duration: 7,
+              repeat: Infinity,
+              ease: "easeInOut",
+              delay: 2
+            }}
+          >
+            <circle cx="150" cy="400" r="18" fill="rgba(59, 130, 246, 0.2)" filter="url(#glow)"/>
+            <polygon 
+              points="145,390 155,390 160,405 140,405" 
+              fill="none" 
+              stroke="#3B82F6" 
+              strokeWidth="2"
+              filter="url(#glow)"
+            />
+          </motion.g>
+          
+          <motion.g
+            animate={{
+              y: [8, -8, 8],
+              rotate: [0, -3, 0]
+            }}
+            transition={{
+              duration: 9,
+              repeat: Infinity,
+              ease: "easeInOut",
+              delay: 0.5
+            }}
+          >
+            <circle cx="950" cy="500" r="22" fill="rgba(16, 185, 129, 0.2)" filter="url(#glow)"/>
+            <circle cx="950" cy="500" r="8" fill="#10B981" filter="url(#glow)"/>
+          </motion.g>
+          
+          {/* Animated Connection Lines */}
+          <motion.line
+            x1="200" y1="150" x2="400" y2="200"
+            stroke="url(#connectionGradient)"
+            strokeWidth="1"
+            opacity="0.3"
+            animate={{
+              strokeDasharray: ["0,200", "100,100", "200,0"],
+              opacity: [0.1, 0.4, 0.1]
+            }}
+            transition={{
+              duration: 4,
+              repeat: Infinity,
+              ease: "linear"
+            }}
+          />
+          
+          <motion.line
+            x1="150" y1="400" x2="350" y2="350"
+            stroke="url(#connectionGradient)"
+            strokeWidth="1"
+            opacity="0.3"
+            animate={{
+              strokeDasharray: ["0,200", "100,100", "200,0"],
+              opacity: [0.1, 0.4, 0.1]
+            }}
+            transition={{
+              duration: 5,
+              repeat: Infinity,
+              ease: "linear",
+              delay: 1
+            }}
+          />
+          
+          <motion.line
+            x1="1000" y1="200" x2="800" y2="300"
+            stroke="url(#connectionGradient)"
+            strokeWidth="1"
+            opacity="0.3"
+            animate={{
+              strokeDasharray: ["0,200", "100,100", "200,0"],
+              opacity: [0.1, 0.4, 0.1]
+            }}
+            transition={{
+              duration: 6,
+              repeat: Infinity,
+              ease: "linear",
+              delay: 2
+            }}
+          />
+        </svg>
+        
+        {/* Floating Verified Icons */}
+        <motion.div
           style={{
             position: 'absolute',
-            top: '60%',
-            right: '15%',
-            ...nodeAnimation,
-            animationDelay: '10s'
+            top: '15%',
+            left: '8%',
+            zIndex: 1
+          }}
+          animate={{
+            y: [-10, 10, -10],
+            rotate: [0, 5, 0, -5, 0]
+          }}
+          transition={{
+            duration: 8,
+            repeat: Infinity,
+            ease: "easeInOut"
           }}
         >
-          <FaCube style={{ fontSize: '2.5rem', color: 'rgba(59, 130, 246, 0.3)' }} />
-        </animated.div>
+          <MdVerified style={{ 
+            fontSize: '2.5rem', 
+            color: 'rgba(45, 212, 191, 0.4)',
+            filter: 'drop-shadow(0 0 10px rgba(45, 212, 191, 0.3))'
+          }} />
+        </motion.div>
+        
+        <motion.div
+          style={{
+            position: 'absolute',
+            top: '25%',
+            right: '12%',
+            zIndex: 1
+          }}
+          animate={{
+            y: [15, -15, 15],
+            rotate: [0, -8, 0, 8, 0]
+          }}
+          transition={{
+            duration: 10,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: 1
+          }}
+        >
+          <MdBadge style={{ 
+            fontSize: '3rem', 
+            color: 'rgba(139, 92, 246, 0.4)',
+            filter: 'drop-shadow(0 0 15px rgba(139, 92, 246, 0.3))'
+          }} />
+        </motion.div>
+        
+        <motion.div
+          style={{
+            position: 'absolute',
+            bottom: '20%',
+            left: '15%',
+            zIndex: 1
+          }}
+          animate={{
+            y: [-8, 12, -8],
+            rotate: [0, 3, 0, -3, 0]
+          }}
+          transition={{
+            duration: 7,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: 2.5
+          }}
+        >
+          <FaShieldAlt style={{ 
+            fontSize: '2.8rem', 
+            color: 'rgba(59, 130, 246, 0.4)',
+            filter: 'drop-shadow(0 0 12px rgba(59, 130, 246, 0.3))'
+          }} />
+        </motion.div>
+        
+        <motion.div
+          style={{
+            position: 'absolute',
+            bottom: '35%',
+            right: '18%',
+            zIndex: 1
+          }}
+          animate={{
+            y: [12, -12, 12],
+            rotate: [0, -6, 0, 6, 0]
+          }}
+          transition={{
+            duration: 9,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: 1.5
+          }}
+        >
+          <FaCheckCircle style={{ 
+            fontSize: '2.2rem', 
+            color: 'rgba(16, 185, 129, 0.4)',
+            filter: 'drop-shadow(0 0 8px rgba(16, 185, 129, 0.3))'
+          }} />
+        </motion.div>
 
         <div className="landing-content">
           <motion.div {...heroFade}>
@@ -237,8 +486,32 @@ const Landing = () => {
         background: 'rgba(31, 42, 68, 0.3)',
         backdropFilter: 'blur(12px)',
         borderTop: '1px solid rgba(45, 212, 191, 0.3)',
-        borderBottom: '1px solid rgba(45, 212, 191, 0.3)'
+        borderBottom: '1px solid rgba(45, 212, 191, 0.3)',
+        position: 'relative',
+        overflow: 'hidden'
       }}>
+        {/* Blockchain Data Blocks Background */}
+        <div style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+          opacity: 0.05,
+          backgroundImage: `
+            linear-gradient(45deg, transparent 40%, rgba(45, 212, 191, 0.1) 40%, rgba(45, 212, 191, 0.1) 60%, transparent 60%),
+            linear-gradient(-45deg, transparent 40%, rgba(59, 130, 246, 0.1) 40%, rgba(59, 130, 246, 0.1) 60%, transparent 60%)
+          `,
+          backgroundSize: '60px 60px',
+          animation: 'slideBlocks 20s linear infinite'
+        }} />
+        
+        <style>{`
+          @keyframes slideBlocks {
+            0% { transform: translateX(-60px) translateY(0); }
+            100% { transform: translateX(0) translateY(-60px); }
+          }
+        `}</style>
         <div className="container">
           <motion.div 
             initial={{ opacity: 0, y: 30 }}
@@ -765,6 +1038,86 @@ const Landing = () => {
           background: 'rgba(31, 42, 68, 0.8)',
           backdropFilter: 'blur(1px)'
         }}></div>
+        
+        {/* Floating Credential Chain */}
+        <svg 
+          style={{
+            position: 'absolute',
+            top: '10%',
+            right: '5%',
+            width: '300px',
+            height: '400px',
+            opacity: 0.1
+          }}
+          viewBox="0 0 300 400"
+        >
+          <defs>
+            <linearGradient id="chainGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#2DD4BF"/>
+              <stop offset="50%" stopColor="#8B5CF6"/>
+              <stop offset="100%" stopColor="#3B82F6"/>
+            </linearGradient>
+          </defs>
+          
+          {/* Credential Chain Links */}
+          <motion.g
+            animate={{ y: [0, -10, 0] }}
+            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+          >
+            <rect x="50" y="50" width="60" height="40" rx="8" fill="url(#chainGradient)" opacity="0.6"/>
+            <circle cx="80" cy="70" r="8" fill="white" opacity="0.8"/>
+          </motion.g>
+          
+          <motion.g
+            animate={{ y: [0, -15, 0] }}
+            transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
+          >
+            <rect x="130" y="120" width="60" height="40" rx="8" fill="url(#chainGradient)" opacity="0.6"/>
+            <circle cx="160" cy="140" r="8" fill="white" opacity="0.8"/>
+          </motion.g>
+          
+          <motion.g
+            animate={{ y: [0, -8, 0] }}
+            transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+          >
+            <rect x="70" y="190" width="60" height="40" rx="8" fill="url(#chainGradient)" opacity="0.6"/>
+            <circle cx="100" cy="210" r="8" fill="white" opacity="0.8"/>
+          </motion.g>
+          
+          <motion.g
+            animate={{ y: [0, -12, 0] }}
+            transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut", delay: 1.5 }}
+          >
+            <rect x="150" y="260" width="60" height="40" rx="8" fill="url(#chainGradient)" opacity="0.6"/>
+            <circle cx="180" cy="280" r="8" fill="white" opacity="0.8"/>
+          </motion.g>
+          
+          {/* Connecting Lines */}
+          <motion.line 
+            x1="110" y1="70" x2="130" y2="140" 
+            stroke="url(#chainGradient)" 
+            strokeWidth="2" 
+            opacity="0.3"
+            animate={{ strokeDasharray: ["0,100", "50,50", "100,0"] }}
+            transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+          />
+          <motion.line 
+            x1="130" y1="160" x2="100" y2="190" 
+            stroke="url(#chainGradient)" 
+            strokeWidth="2" 
+            opacity="0.3"
+            animate={{ strokeDasharray: ["0,100", "50,50", "100,0"] }}
+            transition={{ duration: 3, repeat: Infinity, ease: "linear", delay: 1 }}
+          />
+          <motion.line 
+            x1="130" y1="210" x2="150" y2="280" 
+            stroke="url(#chainGradient)" 
+            strokeWidth="2" 
+            opacity="0.3"
+            animate={{ strokeDasharray: ["0,100", "50,50", "100,0"] }}
+            transition={{ duration: 3, repeat: Infinity, ease: "linear", delay: 2 }}
+          />
+        </svg>
         
         <div className="container" style={{ position: 'relative', zIndex: 2 }}>
           <motion.div 
