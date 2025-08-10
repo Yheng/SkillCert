@@ -348,7 +348,8 @@ body {
 }
 
 .page-header {
-  margin-bottom: var(--space-2xl);
+  max-width: 1400px;
+  margin: 0 auto var(--space-2xl) auto;
 }
 
 .page-title {

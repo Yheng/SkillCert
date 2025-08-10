@@ -11,10 +11,155 @@ import Settings from './pages/Settings'
 import EducatorDashboard from './pages/EducatorDashboard'
 import Analytics from './pages/Analytics'
 import { NeumorphicButton } from './components/shared/NeumorphicButton'
-import { FaHome, FaTachometerAlt, FaTasks, FaCheckCircle, FaCog, FaSignOutAlt, FaGraduationCap, FaUsers, FaChartBar, FaBars, FaTimes, FaShieldAlt, FaChevronRight } from 'react-icons/fa'
+import { FaHome, FaTachometerAlt, FaTasks, FaCheckCircle, FaCog, FaSignOutAlt, FaGraduationCap, FaUsers, FaChartBar, FaBars, FaTimes, FaShieldAlt, FaChevronRight, FaEye, FaPlay } from 'react-icons/fa'
 import backendService from './api/backend'
 import 'react-toastify/dist/ReactToastify.css'
 import './professional-landing.css'
+
+// Public Layout Component (for non-authenticated verification)
+const PublicVerificationLayout = ({ children }) => {
+  return (
+    <div className="min-h-screen" style={{ background: 'var(--bg-primary)' }}>
+      {/* Landing Page Header */}
+      <nav style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        zIndex: 50,
+        background: 'rgba(15, 23, 42, 0.95)',
+        backdropFilter: 'blur(20px)',
+        borderBottom: '1px solid rgba(255, 255, 255, 0.1)'
+      }}>
+        <div style={{ maxWidth: '1400px', margin: '0 auto', padding: '1rem 2rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', textDecoration: 'none' }}>
+              <div style={{ 
+                width: '40px', 
+                height: '40px', 
+                background: 'linear-gradient(135deg, #2DD4BF, #3B82F6)',
+                borderRadius: '12px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}>
+                <FaShieldAlt style={{ color: 'white', fontSize: '1.25rem' }} />
+              </div>
+              <div>
+                <span style={{ 
+                  fontSize: '1.5rem', 
+                  fontWeight: 700, 
+                  color: 'white'
+                }}>SkillCert</span>
+                <div style={{ fontSize: '0.75rem', color: 'rgba(248, 250, 252, 0.7)' }}>
+                  Verified Skills Platform
+                </div>
+              </div>
+            </Link>
+            
+            <div style={{ display: 'flex', alignItems: 'center', gap: '2rem' }}>
+              <div style={{ display: 'flex', gap: '2rem' }}>
+                <Link to="/#features" style={{ 
+                  color: 'rgba(248, 250, 252, 0.8)', 
+                  textDecoration: 'none',
+                  transition: 'color 0.3s ease'
+                }}>Features</Link>
+                <Link to="/#testimonials" style={{ 
+                  color: 'rgba(248, 250, 252, 0.8)', 
+                  textDecoration: 'none',
+                  transition: 'color 0.3s ease'
+                }}>Testimonials</Link>
+              </div>
+
+              <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                <Link to="/verification" style={{ 
+                  color: '#2DD4BF', 
+                  textDecoration: 'none',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.5rem',
+                  fontWeight: 600
+                }}>
+                  <FaEye />
+                  Verify
+                </Link>
+                <button
+                  onClick={async () => {
+                    try {
+                      const result = await backendService.login({
+                        email: 'demo@skillcert.com',
+                        password: 'demo123'
+                      })
+                      if (result.success) {
+                        const userRole = result.user?.role || 'freelancer'
+                        switch (userRole) {
+                          case 'educator':
+                            window.location.href = '/educator-dashboard'
+                            break
+                          case 'employer':
+                            window.location.href = '/verification'
+                            break
+                          default:
+                            window.location.href = '/dashboard'
+                        }
+                      } else {
+                        alert('Demo login failed: ' + (result.error || 'Unknown error'))
+                      }
+                    } catch (error) {
+                      console.error('Demo login error:', error)
+                      alert('Demo login failed: ' + error.message)
+                    }
+                  }}
+                  style={{
+                    background: 'linear-gradient(135deg, #2DD4BF, #3B82F6)',
+                    border: 'none',
+                    borderRadius: '8px',
+                    padding: '0.75rem 1.5rem',
+                    color: 'white',
+                    fontWeight: 600,
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.5rem',
+                    transition: 'transform 0.3s ease'
+                  }}
+                >
+                  <FaPlay />
+                  Try Demo
+                </button>
+                <Link to="/auth">
+                  <button style={{
+                    background: 'transparent',
+                    border: '2px solid #2DD4BF',
+                    borderRadius: '8px',
+                    padding: '0.75rem 1.5rem',
+                    color: '#2DD4BF',
+                    fontWeight: 600,
+                    cursor: 'pointer',
+                    transition: 'all 0.3s ease'
+                  }}>
+                    Get Started Free
+                  </button>
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      {/* Main Content with top padding for fixed header */}
+      <main style={{ 
+        paddingTop: '80px', 
+        minHeight: '100vh',
+        background: 'var(--bg-primary)'
+      }}>
+        <div className="page-container" style={{ padding: 'var(--space-2xl)' }}>
+          {children}
+        </div>
+      </main>
+    </div>
+  )
+}
 
 // Modern Sidebar Navigation Component
 const AppLayout = ({ children }) => {
@@ -241,6 +386,21 @@ function App() {
         <Routes>
           <Route path="/" element={<ProfessionalLanding />} />
           <Route path="/auth" element={<Auth />} />
+          {/* Public verification route for non-authenticated users */}
+          <Route 
+            path="/verification" 
+            element={
+              !backendService.isAuthenticated() ? (
+                <PublicVerificationLayout>
+                  <Verification />
+                </PublicVerificationLayout>
+              ) : (
+                <AppLayout>
+                  <Verification />
+                </AppLayout>
+              )
+            } 
+          />
           <Route 
             path="/*" 
             element={

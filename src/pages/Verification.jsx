@@ -79,7 +79,7 @@ const Verification = () => {
 
   const handleSearch = async (e) => {
     e.preventDefault()
-    if (!searchQuery.trim()) return
+    if (!searchQuery?.trim?.()) return
 
     try {
       setLoading(true)
@@ -236,7 +236,7 @@ Verify at: ${window.location.origin}/verification`], { type: 'text/plain' })
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
           className="card"
-          style={{ marginBottom: '2rem', maxWidth: '800px', margin: '0 auto 2rem auto' }}
+          style={{ marginBottom: '2rem' }}
         >
           {/* Enhanced Search Type Selector */}
           <div className="tab-navigation">
@@ -296,7 +296,7 @@ Verify at: ${window.location.origin}/verification`], { type: 'text/plain' })
                 <motion.button
                   type="submit"
                   className="btn btn-primary"
-                  disabled={loading || !searchQuery.trim()}
+                  disabled={loading || !searchQuery?.trim?.()}
                   whileHover={!loading ? { scale: 1.02 } : {}}
                   whileTap={!loading ? { scale: 0.98 } : {}}
                   style={{ 
@@ -334,7 +334,7 @@ Verify at: ${window.location.origin}/verification`], { type: 'text/plain' })
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            style={{ maxWidth: '900px', margin: '0 auto' }}
+            style={{}}
           >
             {searchResult.type === 'credential' ? (
               <div className="card">
@@ -553,9 +553,40 @@ Verify at: ${window.location.origin}/verification`], { type: 'text/plain' })
                         <div className="data-card-actions">
                           <motion.button
                             className="btn btn-primary btn-full"
-                            onClick={() => {
+                            onClick={async () => {
                               setSearchType('credential')
                               setSearchQuery(credential.blockchain_id)
+                              
+                              // Trigger the search immediately
+                              try {
+                                setLoading(true)
+                                setSearchResult(null)
+
+                                const result = await backendService.verifyCredential(credential.blockchain_id)
+                                if (result.success && result.credential) {
+                                  setSearchResult({
+                                    type: 'credential',
+                                    isValid: result.isValid,
+                                    data: result.credential,
+                                    verificationTime: new Date().toISOString()
+                                  })
+                                } else {
+                                  setSearchResult({
+                                    type: 'credential',
+                                    isValid: false,
+                                    error: result.error || 'Credential not found or invalid'
+                                  })
+                                }
+                              } catch (error) {
+                                console.error('Verification error:', error)
+                                setSearchResult({
+                                  type: 'credential',
+                                  isValid: false,
+                                  error: 'Verification failed. Please try again.'
+                                })
+                              } finally {
+                                setLoading(false)
+                              }
                             }}
                             whileHover={{ scale: 1.02 }}
                             whileTap={{ scale: 0.98 }}

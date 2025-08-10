@@ -40,7 +40,7 @@ class BlockchainService {
         // Request account access
         await window.ethereum.request({ method: 'eth_requestAccounts' });
         
-        this.provider = new ethers.providers.Web3Provider(window.ethereum);
+        this.provider = new ethers.BrowserProvider(window.ethereum);
         this.signer = this.provider.getSigner();
         
         // Check if we're on the correct network (Hardhat local)
@@ -73,7 +73,7 @@ class BlockchainService {
    */
   async connectToLocalNode() {
     try {
-      this.provider = new ethers.providers.JsonRpcProvider('http://localhost:8545');
+      this.provider = new ethers.JsonRpcProvider('http://localhost:8545');
       
       // Use first account from Hardhat
       const accounts = await this.provider.listAccounts();
@@ -342,7 +342,7 @@ class BlockchainService {
       const balance = await this.provider.getBalance(address);
       return { 
         success: true, 
-        balance: ethers.utils.formatEther(balance)
+        balance: ethers.formatEther(balance)
       };
     } catch (error) {
       console.error('Get balance error:', error);
