@@ -3,7 +3,6 @@ import { motion } from "framer-motion"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../components/ui/card"
 import { Button } from "../components/ui/button"
 import { GlassCard } from "../components/shared/GlassCard"
-import { ThreeDBadge } from "../components/shared/ThreeDBadge"
 import { AuroraToast } from "../components/shared/AuroraToast"
 import ProgressChart from "../components/shared/ProgressChart"
 import CertificateCard from "../components/shared/CertificateCard"
@@ -16,7 +15,8 @@ import {
   FaDownload,
   FaShare,
   FaShieldAlt,
-  FaExclamationTriangle
+  FaExclamationTriangle,
+  FaClock
 } from "react-icons/fa"
 import backendService from "../api/backend"
 import blockchainService from "../api/blockchain"
@@ -217,12 +217,15 @@ const Dashboard = () => {
 
   const handleViewCredential = async (credential) => {
     try {
-      // Verify credential on blockchain
-      const result = await blockchainService.verifyCredential(credential.blockchain_id)
-      if (result.success) {
-        AuroraToast.credential(`Credential verified! Status: ${result.isValid ? 'Valid' : 'Invalid'}`)
+      // Verify credential using backend API
+      const result = await backendService.verifyCredential(credential.blockchain_id || credential.id)
+      if (result.success && result.isValid) {
+        AuroraToast.success(`Credential verified! ${credential.skill} is authentic.`)
+        // Open verification page to show full details
+        const verifyUrl = `${window.location.origin}/verify/${credential.blockchain_id || credential.id}`
+        window.open(verifyUrl, '_blank')
       } else {
-        AuroraToast.warning('Could not verify credential on blockchain')
+        AuroraToast.warning('Could not verify this credential')
       }
     } catch (error) {
       console.error('Credential verification error:', error)
@@ -231,7 +234,7 @@ const Dashboard = () => {
   }
 
   const handleShareCredential = (credential) => {
-    const shareUrl = `${window.location.origin}/verify/${credential.blockchain_id}`
+    const shareUrl = `${window.location.origin}/verify/${credential.blockchain_id || credential.id}`
     navigator.clipboard.writeText(shareUrl).then(() => {
       AuroraToast.success('Credential verification link copied to clipboard!')
     }).catch(() => {
@@ -508,39 +511,13 @@ const Dashboard = () => {
             {credentials.length > 0 ? (
               <div className="grid grid-cols-2">
                 {credentials.slice(0, 6).map((credential, index) => (
-                  <div key={credential.id} className="credential-card">
-                    <div className="credential-header">
-                      <div className="credential-info">
-                        <div className="credential-skill">{credential.skill}</div>
-                        <div className="credential-meta">
-                          <FaCertificate size={12} />
-                          <span>{credential.issuer || 'SkillCert'}</span>
-                        </div>
-                        <div className="credential-meta">
-                          <span>{new Date(credential.created_at || credential.dateIssued).toLocaleDateString()}</span>
-                        </div>
-                      </div>
-                      <div className="credential-actions">
-                        <button 
-                          className="btn btn-sm btn-ghost" 
-                          onClick={() => handleViewCredential(credential)}
-                          title="View credential"
-                        >
-                          <FaEye size={12} />
-                        </button>
-                        <button 
-                          className="btn btn-sm btn-ghost" 
-                          onClick={() => handleShareCredential(credential)}
-                          title="Share credential"
-                        >
-                          <FaShare size={12} />
-                        </button>
-                        <button className="btn btn-sm btn-ghost" title="Download credential">
-                          <FaDownload size={12} />
-                        </button>
-                      </div>
-                    </div>
-                  </div>
+                  <CertificateCard 
+                    key={credential.id}
+                    credential={credential}
+                    showActions={true}
+                    size="small"
+                    onView={handleViewCredential}
+                  />
                 ))}
               </div>
             ) : (

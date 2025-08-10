@@ -481,13 +481,13 @@ app.post('/api/credentials', authenticateToken, (req, res) => {
 app.get('/api/verify/:identifier', (req, res) => {
   const identifier = req.params.identifier;
   
-  // Search by blockchain_id or transaction_hash
+  // Search by blockchain_id, transaction_hash, or regular id
   db.get(
     `SELECT c.*, u.name as user_name, u.email as user_email
      FROM credentials c 
      LEFT JOIN users u ON c.user_id = u.id 
-     WHERE c.blockchain_id = ? OR c.transaction_hash = ?`,
-    [identifier, identifier],
+     WHERE c.blockchain_id = ? OR c.transaction_hash = ? OR c.id = ?`,
+    [identifier, identifier, identifier],
     (err, credential) => {
       if (err) {
         console.error('Verification query error:', err);
@@ -506,12 +506,13 @@ app.get('/api/verify/:identifier', (req, res) => {
         success: true,
         isValid: true,
         credential: {
-          id: credential.blockchain_id,
+          id: credential.blockchain_id || credential.id,
           skill: credential.skill,
           user_name: credential.user_name,
           created_at: credential.created_at,
-          blockchain_id: credential.blockchain_id,
-          ipfs_hash: credential.ipfs_hash
+          blockchain_id: credential.blockchain_id || credential.id,
+          ipfs_hash: credential.ipfs_hash,
+          issuer: credential.issuer
         }
       });
     }

@@ -1,7 +1,6 @@
 import React from 'react'
 import { motion } from 'framer-motion'
 import Chart from 'react-apexcharts'
-import { FaChartLine, FaTrophy, FaFire } from 'react-icons/fa'
 import { GlassCard } from './GlassCard'
 
 const ProgressChart = ({ data = null, title = "Your Learning Progress", height = 300 }) => {
@@ -171,22 +170,16 @@ const ProgressChart = ({ data = null, title = "Your Learning Progress", height =
 
   const stats = [
     {
-      icon: FaTrophy,
       label: 'Total Skills',
-      value: chartData.total || 35,
-      color: 'from-yellow-500 to-orange-500'
+      value: chartData.total || 35
     },
     {
-      icon: FaChartLine,
       label: 'This Month',
-      value: chartData.values ? chartData.values[chartData.values.length - 1] : 12,
-      color: 'from-teal-500 to-blue-500'
+      value: chartData.values ? chartData.values[chartData.values.length - 1] : 12
     },
     {
-      icon: FaFire,
       label: 'Streak',
-      value: `${Math.floor(Math.random() * 15) + 5} days`,
-      color: 'from-red-500 to-pink-500'
+      value: `${Math.floor(Math.random() * 15) + 5} days`
     }
   ]
 
@@ -203,20 +196,6 @@ const ProgressChart = ({ data = null, title = "Your Learning Progress", height =
             <h3 className="text-lg sm:text-xl lg:text-2xl font-bold bg-gradient-to-r from-teal-400 to-blue-400 bg-clip-text text-transparent mb-2">{title}</h3>
             <p className="text-gray-400 text-xs sm:text-sm">Track your skill development over time</p>
           </div>
-          <motion.div
-            animate={{ 
-              scale: [1, 1.1, 1],
-              rotate: [0, 5, -5, 0]
-            }}
-            transition={{ 
-              duration: 2,
-              repeat: Infinity,
-              repeatDelay: 5
-            }}
-            className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-r from-teal-500 to-blue-500 flex items-center justify-center flex-shrink-0"
-          >
-            <FaChartLine className="text-white text-lg" />
-          </motion.div>
         </div>
 
         {/* Mini Stats */}
@@ -229,10 +208,7 @@ const ProgressChart = ({ data = null, title = "Your Learning Progress", height =
               transition={{ duration: 0.5, delay: 0.1 + index * 0.1 }}
               className="text-center"
             >
-              <div className={`w-6 h-6 sm:w-8 sm:h-8 mx-auto mb-1 sm:mb-2 rounded-md sm:rounded-lg bg-gradient-to-r ${stat.color} flex items-center justify-center`}>
-                <stat.icon className="text-white text-xs sm:text-sm" />
-              </div>
-              <div className="text-sm sm:text-base lg:text-lg font-bold text-white leading-tight">{stat.value}</div>
+              <div className="text-sm sm:text-base lg:text-lg font-bold text-white leading-tight mb-1">{stat.value}</div>
               <div className="text-xs text-gray-400 leading-tight">{stat.label}</div>
             </motion.div>
           ))}

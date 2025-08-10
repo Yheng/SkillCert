@@ -10,6 +10,7 @@ import Verification from './pages/Verification'
 import Settings from './pages/Settings'
 import EducatorDashboard from './pages/EducatorDashboard'
 import Analytics from './pages/Analytics'
+import DirectVerification from './pages/DirectVerification'
 import { NeumorphicButton } from './components/shared/NeumorphicButton'
 import { FaHome, FaTachometerAlt, FaTasks, FaCheckCircle, FaCog, FaSignOutAlt, FaGraduationCap, FaUsers, FaChartBar, FaBars, FaTimes, FaShieldAlt, FaChevronRight, FaEye, FaPlay } from 'react-icons/fa'
 import backendService from './api/backend'
@@ -386,6 +387,21 @@ function App() {
         <Routes>
           <Route path="/" element={<ProfessionalLanding />} />
           <Route path="/auth" element={<Auth />} />
+          {/* Direct verification route for shared credential links */}
+          <Route 
+            path="/verify/:id" 
+            element={
+              !backendService.isAuthenticated() ? (
+                <PublicVerificationLayout>
+                  <DirectVerification />
+                </PublicVerificationLayout>
+              ) : (
+                <AppLayout>
+                  <DirectVerification />
+                </AppLayout>
+              )
+            } 
+          />
           {/* Public verification route for non-authenticated users */}
           <Route 
             path="/verification" 

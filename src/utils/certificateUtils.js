@@ -37,7 +37,7 @@ class CertificateUtils {
   }
 
   /**
-   * Generate certificate as PDF
+   * Generate clean, professional certificate PDF with subtle blockchain enhancements
    * @param {Object} credentialData - Credential information
    * @param {Object} options - PDF options
    * @returns {Promise<Blob>} PDF blob
@@ -50,102 +50,234 @@ class CertificateUtils {
         format: 'a4'
       })
 
-      // Generate QR code for verification
-      const qrCode = await this.generateQRCode(credentialData.id, {
-        width: 150,
-        height: 150
+      // Generate QR code for verification - Use consistent ID
+      const certificateId = credentialData.blockchain_id || credentialData.id || 'unknown'
+      const qrCode = await this.generateQRCode(certificateId, {
+        width: 120,
+        height: 120,
+        margin: 1
       })
 
-      // Colors
-      const primaryColor = [45, 212, 191] // Teal
-      const secondaryColor = [59, 130, 246] // Blue
-      const darkColor = [31, 42, 68] // Dark gray
-      const textColor = [255, 255, 255] // White
+      // Professional color palette inspired by UAE Design System
+      const darkNavy = [31, 41, 55]     // Professional dark text
+      const vibrantTeal = [20, 184, 166] // Blockchain accent color
+      const warmGold = [251, 191, 36]    // Premium accent
+      const softGray = [107, 114, 128]   // Secondary text
+      const lightGray = [243, 244, 246]  // Background accent
+      const pureWhite = [255, 255, 255]  // Clean background
+      const subtleAccent = [240, 253, 250] // Very light teal for backgrounds
 
-      // Background gradient effect
-      pdf.setFillColor(...darkColor)
+      // Clean white background
+      pdf.setFillColor(...pureWhite)
       pdf.rect(0, 0, 297, 210, 'F')
 
-      // Header section with gradient-like effect
-      pdf.setFillColor(...primaryColor)
-      pdf.rect(0, 0, 297, 60, 'F')
-      pdf.setFillColor(45, 212, 191, 0.8)
-      pdf.rect(0, 30, 297, 30, 'F')
+      // Subtle decorative corner elements (inspired by UAE Design System patterns)
+      pdf.setFillColor(240, 253, 250) // Very subtle teal
+      // Simple corner rectangles as accents
+      pdf.rect(0, 0, 25, 8, 'F') // Top-left
+      pdf.rect(272, 0, 25, 8, 'F') // Top-right  
+      pdf.rect(0, 202, 25, 8, 'F') // Bottom-left
+      pdf.rect(272, 202, 25, 8, 'F') // Bottom-right
 
-      // Certificate title
-      pdf.setFont('helvetica', 'bold')
-      pdf.setFontSize(36)
-      pdf.setTextColor(...textColor)
-      pdf.text('BLOCKCHAIN CERTIFICATE', 148.5, 25, { align: 'center' })
+      // Professional header border with subtle gradient effect
+      pdf.setDrawColor(...vibrantTeal)
+      pdf.setLineWidth(3)
+      pdf.line(30, 25, 267, 25)
       
-      pdf.setFontSize(18)
-      pdf.setFont('helvetica', 'normal')
-      pdf.text('Verified on SkillCert Platform', 148.5, 45, { align: 'center' })
+      // Subtle complementary line below main border
+      pdf.setDrawColor(...vibrantTeal)
+      pdf.setLineWidth(0.5)
+      pdf.line(30, 27, 267, 27)
 
-      // Main content area
-      pdf.setFillColor(255, 255, 255, 0.05)
-      pdf.rect(20, 80, 257, 100, 'F')
-
-      // Skill certification text
-      pdf.setTextColor(0, 0, 0)
-      pdf.setFontSize(24)
+      // HEADER - Clean and centered
+      pdf.setFontSize(48)
       pdf.setFont('helvetica', 'bold')
-      pdf.text('This certifies that', 148.5, 100, { align: 'center' })
-
-      pdf.setFontSize(32)
-      pdf.setTextColor(...primaryColor)
-      pdf.text(credentialData.recipientName || 'Certified Individual', 148.5, 115, { align: 'center' })
-
-      pdf.setFontSize(20)
-      pdf.setTextColor(0, 0, 0)
+      pdf.setTextColor(...darkNavy)
+      pdf.text('SkillCert', 148.5, 45, { align: 'center' })
+      
+      pdf.setFontSize(14)
+      pdf.setTextColor(...vibrantTeal)
       pdf.setFont('helvetica', 'normal')
-      pdf.text('has successfully demonstrated competency in', 148.5, 130, { align: 'center' })
+      pdf.text('Blockchain Certificate of Achievement', 148.5, 55, { align: 'center' })
 
+      // Subtle blockchain network icon (hexagon-based pattern inspired by Tabler Icons)
+      CertificateUtils.drawBlockchainIcon(pdf, 45, 45, 8, vibrantTeal, 0.15)
+      CertificateUtils.drawBlockchainIcon(pdf, 252, 45, 8, vibrantTeal, 0.15)
+
+      // Simple divider line with subtle geometric accents
+      pdf.setDrawColor(...softGray)
+      pdf.setLineWidth(1)
+      pdf.line(80, 65, 217, 65)
+      
+      // Small decorative elements around divider
+      pdf.setFillColor(...vibrantTeal)
+      pdf.circle(75, 65, 1.5, 'F')
+      pdf.circle(222, 65, 1.5, 'F')
+
+      // CERTIFICATE CONTENT - Clean and centered
+      const centerX = 148.5
+      
+      // Introduction text
+      pdf.setFontSize(16)
+      pdf.setFont('helvetica', 'normal')
+      pdf.setTextColor(...darkNavy)
+      pdf.text('This is to certify that', centerX, 85, { align: 'center' })
+
+      // RECIPIENT NAME - Prominent and clean
+      pdf.setFontSize(38)
+      pdf.setFont('helvetica', 'bold')
+      pdf.setTextColor(...darkNavy)
+      const recipientName = credentialData.recipientName || 'Alex Freelancer'
+      pdf.text(recipientName, centerX, 105, { align: 'center' })
+
+      // Simple underline for name
+      pdf.setDrawColor(...vibrantTeal)
+      pdf.setLineWidth(2)
+      const nameWidth = pdf.getTextWidth(recipientName)
+      const lineStartX = centerX - (nameWidth / 2)
+      const lineEndX = centerX + (nameWidth / 2)
+      pdf.line(lineStartX, 110, lineEndX, 110)
+
+      // Achievement text
+      pdf.setFontSize(16)
+      pdf.setFont('helvetica', 'normal')
+      pdf.setTextColor(...darkNavy)
+      pdf.text('has successfully completed the requirements for', centerX, 125, { align: 'center' })
+
+      // SKILL NAME - Clear and prominent
       pdf.setFontSize(28)
+      pdf.setTextColor(...vibrantTeal)
       pdf.setFont('helvetica', 'bold')
-      pdf.setTextColor(...secondaryColor)
-      pdf.text(credentialData.skill || 'Professional Skill', 148.5, 145, { align: 'center' })
+      const skillName = (credentialData.skill || 'Professional Skill')
+      pdf.text(skillName, centerX, 145, { align: 'center' })
 
-      // Date and credential ID
-      const issueDate = new Date(credentialData.timestamp || Date.now()).toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
-      })
+      // Simple underline for skill
+      pdf.setDrawColor(...warmGold)
+      pdf.setLineWidth(1)
+      const skillWidth = pdf.getTextWidth(skillName)
+      const skillLineStartX = centerX - (skillWidth / 2)
+      const skillLineEndX = centerX + (skillWidth / 2)
+      pdf.line(skillLineStartX, 150, skillLineEndX, 150)
 
+      // Description
       pdf.setFontSize(12)
       pdf.setFont('helvetica', 'normal')
-      pdf.setTextColor(100, 100, 100)
-      pdf.text(`Issued on ${issueDate}`, 148.5, 160, { align: 'center' })
-      pdf.text(`Credential ID: ${credentialData.id}`, 148.5, 170, { align: 'center' })
+      pdf.setTextColor(...softGray)
+      pdf.text('This certification is blockchain-verified and represents mastery of professional skills', centerX, 165, { align: 'center' })
 
-      // QR Code
+      // LEFT SIDE - Date box (clean and simple)
+      pdf.setDrawColor(...vibrantTeal)
+      pdf.setLineWidth(1)
+      pdf.rect(30, 175, 40, 20, 'S')
+      
+      pdf.setFontSize(10)
+      pdf.setFont('helvetica', 'bold')
+      pdf.setTextColor(...darkNavy)
+      pdf.text('DATE ISSUED', 50, 182, { align: 'center' })
+      
+      const issueDate = new Date(credentialData.timestamp || Date.now()).toLocaleDateString('en-US', {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric'
+      })
+      
+      pdf.setFontSize(9)
+      pdf.setFont('helvetica', 'normal')
+      pdf.text(issueDate, 50, 190, { align: 'center' })
+
+      // RIGHT SIDE - QR Code (clean and simple)
       if (qrCode) {
-        pdf.addImage(qrCode, 'PNG', 240, 120, 40, 40)
+        pdf.setDrawColor(...vibrantTeal)
+        pdf.setLineWidth(1)
+        pdf.rect(227, 175, 40, 20, 'S')
+        
+        pdf.addImage(qrCode, 'PNG', 229, 150, 18, 18)
+        
         pdf.setFontSize(10)
-        pdf.text('Verify Online', 260, 170, { align: 'center' })
+        pdf.setFont('helvetica', 'bold')
+        pdf.setTextColor(...darkNavy)
+        pdf.text('BLOCKCHAIN', 247, 182, { align: 'center' })
+        pdf.text('VERIFIED', 247, 190, { align: 'center' })
       }
 
-      // Blockchain verification badge
-      pdf.setDrawColor(...primaryColor)
-      pdf.setLineWidth(2)
-      pdf.circle(40, 140, 15, 'S')
-      pdf.setFontSize(8)
-      pdf.setFont('helvetica', 'bold')
-      pdf.text('BLOCKCHAIN', 40, 135, { align: 'center' })
-      pdf.text('VERIFIED', 40, 145, { align: 'center' })
-
-      // Footer
+      // SIGNATURE AREA - Simple and professional
+      pdf.setFontSize(14)
+      pdf.setFont('helvetica', 'italic')
+      pdf.setTextColor(...darkNavy)
+      pdf.text('Digitally Certified', centerX, 175, { align: 'center' })
+      
+      // Signature line
+      pdf.setDrawColor(...darkNavy)
+      pdf.setLineWidth(1)
+      pdf.line(centerX - 25, 182, centerX + 25, 182)
+      
       pdf.setFontSize(10)
-      pdf.setTextColor(150, 150, 150)
-      pdf.text('This certificate is cryptographically secured on the blockchain', 148.5, 190, { align: 'center' })
-      pdf.text(`Issuer: ${credentialData.issuerAddress || 'Authorized Educator'}`, 148.5, 200, { align: 'center' })
+      pdf.setFont('helvetica', 'normal')
+      pdf.setTextColor(...softGray)
+      pdf.text('SkillCert Platform', centerX, 189, { align: 'center' })
+
+      // FOOTER - Simple and clean
+      pdf.setDrawColor(...vibrantTeal)
+      pdf.setLineWidth(2)
+      pdf.line(30, 200, 267, 200)
+      
+      pdf.setFontSize(8)
+      pdf.setTextColor(...softGray)
+      pdf.text(`Certificate ID: ${certificateId}`, centerX, 206, { align: 'center' })
+
+      // Subtle professional footer enhancements
+      // Geometric pattern lines (inspired by professional certificates)
+      pdf.setDrawColor(...softGray)
+      pdf.setLineWidth(0.3)
+      for (let i = 0; i < 5; i++) {
+        const x = 40 + i * 45
+        pdf.line(x, 202, x + 25, 202)
+      }
 
       return pdf.output('blob')
     } catch (error) {
       console.error('PDF generation error:', error)
       throw new Error('Failed to generate certificate PDF')
     }
+  }
+
+  /**
+   * Draw a subtle blockchain network icon (simplified geometric pattern)
+   * @param {Object} pdf - jsPDF instance
+   * @param {number} x - X coordinate center
+   * @param {number} y - Y coordinate center
+   * @param {number} size - Icon size
+   * @param {Array} color - RGB color array
+   * @param {number} opacity - Opacity (0-1, not used for compatibility)
+   */
+  static drawBlockchainIcon(pdf, x, y, size, color, opacity = 0.2) {
+    const [r, g, b] = color
+    
+    // Use lighter teal colors for subtlety
+    pdf.setFillColor(178, 230, 226) // Very light teal
+    pdf.setDrawColor(134, 207, 202) // Light teal
+    pdf.setLineWidth(0.5)
+    
+    // Main hexagon using simple shapes (central node)
+    pdf.circle(x, y, size * 0.6, 'FD')
+    
+    // Network connection lines (subtle)
+    pdf.setDrawColor(178, 230, 226)
+    pdf.setLineWidth(0.3)
+    
+    // Connection points in hexagonal pattern
+    const angles = [0, Math.PI / 3, 2 * Math.PI / 3, Math.PI, 4 * Math.PI / 3, 5 * Math.PI / 3]
+    angles.forEach(angle => {
+      const endX = x + size * 1.2 * Math.cos(angle)
+      const endY = y + size * 1.2 * Math.sin(angle)
+      
+      // Connection line
+      pdf.line(x, y, endX, endY)
+      
+      // Small node at end
+      pdf.setFillColor(200, 240, 235) // Very subtle teal
+      pdf.circle(endX, endY, size * 0.2, 'F')
+    })
   }
 
   /**

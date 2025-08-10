@@ -17,10 +17,10 @@ import {
   FaImage
 } from 'react-icons/fa'
 import { GlassCard } from './GlassCard'
-import { ThreeDBadge } from './ThreeDBadge'
 import CertificateUtils from '../../utils/certificateUtils'
 import SocialShare from '../../utils/socialShare'
 import { AuroraToast } from './AuroraToast'
+import backendService from '../../api/backend'
 
 const CertificateCard = ({ 
   credential, 
@@ -62,10 +62,14 @@ const CertificateCard = ({
     try {
       setIsGenerating(true)
       
+      // Get current user info
+      const currentUser = backendService.getCurrentUser()
+      
       const certificateData = {
-        id: credential.id || credential.blockchain_id,
+        id: credential.blockchain_id || credential.id,
+        blockchain_id: credential.blockchain_id || credential.id,
         skill: credential.skill,
-        recipientName: credential.recipient_name || 'Verified Professional',
+        recipientName: currentUser?.name || credential.recipient_name || credential.user_name || 'Alex Freelancer',
         timestamp: credential.timestamp || credential.created_at,
         issuerAddress: credential.issuer || credential.issuer_address,
         metadata: credential.metadata
@@ -160,7 +164,7 @@ const CertificateCard = ({
   }
 
   const openVerification = () => {
-    const verifyUrl = `${window.location.origin}/verify/${credential.id || credential.blockchain_id}`
+    const verifyUrl = `${window.location.origin}/verify/${credential.blockchain_id || credential.id}`
     window.open(verifyUrl, '_blank')
   }
 
@@ -184,12 +188,9 @@ const CertificateCard = ({
           {/* Certificate header */}
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-4">
             <div className="flex items-center gap-3 min-w-0 flex-1">
-              <ThreeDBadge 
-                skill={credential.skill}
-                size="small"
-                verified={true}
-                color="#2DD4BF"
-              />
+              <div className="flex-shrink-0 w-12 h-12 bg-gradient-to-br from-teal-500 to-blue-500 rounded-xl flex items-center justify-center shadow-lg">
+                <FaCertificate className="text-white text-lg" />
+              </div>
               <div>
                 <h3 className="text-lg sm:text-xl font-bold text-gradient truncate">
                   {credential.skill} Certification

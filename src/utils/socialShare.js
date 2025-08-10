@@ -10,7 +10,7 @@ class SocialShare {
   static shareOnLinkedIn(credential, options = {}) {
     const baseUrl = 'https://www.linkedin.com/sharing/share-offsite/'
     const shareData = {
-      url: `${window.location.origin}/verify/${credential.id}`,
+      url: `${window.location.origin}/verify/${credential.blockchain_id || credential.id}`,
       title: `${credential.skill} Certification`,
       summary: `I've earned a blockchain-verified credential in ${credential.skill} on SkillCert! This tamper-proof certificate demonstrates my professional expertise.`,
       source: 'SkillCert'
@@ -36,7 +36,7 @@ class SocialShare {
     const baseUrl = 'https://twitter.com/intent/tweet'
     const shareData = {
       text: `🎓 Just earned my ${credential.skill} certification on @SkillCert! Blockchain-verified and tamper-proof. #BlockchainCertification #SkillCert #${credential.skill.replace(/\s+/g, '')}`,
-      url: `${window.location.origin}/verify/${credential.id}`,
+      url: `${window.location.origin}/verify/${credential.blockchain_id || credential.id}`,
       hashtags: ['SkillCert', 'BlockchainCertified', credential.skill.replace(/\s+/g, '')]
     }
 
@@ -57,7 +57,7 @@ class SocialShare {
   static shareOnFacebook(credential, options = {}) {
     const baseUrl = 'https://www.facebook.com/sharer/sharer.php'
     const shareData = {
-      u: `${window.location.origin}/verify/${credential.id}`,
+      u: `${window.location.origin}/verify/${credential.blockchain_id || credential.id}`,
       quote: `I've earned a blockchain-verified ${credential.skill} certification on SkillCert!`
     }
 
@@ -79,7 +79,7 @@ Hi,
 I'm excited to share that I've earned a blockchain-verified certification in ${credential.skill}!
 
 You can verify my credential here:
-${window.location.origin}/verify/${credential.id}
+${window.location.origin}/verify/${credential.blockchain_id || credential.id}
 
 This certificate is:
 ✅ Tamper-proof and stored on the blockchain
@@ -102,7 +102,7 @@ Best regards
    */
   static async copyVerificationLink(credential) {
     try {
-      const verificationUrl = `${window.location.origin}/verify/${credential.id}`
+      const verificationUrl = `${window.location.origin}/verify/${credential.blockchain_id || credential.id}`
       await navigator.clipboard.writeText(verificationUrl)
       return true
     } catch (error) {
@@ -119,7 +119,7 @@ Best regards
    */
   static async generateSocialQR(credential, options = {}) {
     const QRCode = await import('qrcode')
-    const verificationUrl = `${window.location.origin}/verify/${credential.id}`
+    const verificationUrl = `${window.location.origin}/verify/${credential.blockchain_id || credential.id}`
     
     const qrOptions = {
       width: options.width || 300,
@@ -149,7 +149,7 @@ Best regards
       const shareData = {
         title: `${credential.skill} Certification`,
         text: `I've earned a blockchain-verified credential in ${credential.skill} on SkillCert!`,
-        url: `${window.location.origin}/verify/${credential.id}`
+        url: `${window.location.origin}/verify/${credential.blockchain_id || credential.id}`
       }
 
       await navigator.share(shareData)
@@ -190,7 +190,7 @@ Best regards
    * @returns {Object} Post content
    */
   static generatePostContent(credential, platform) {
-    const verificationUrl = `${window.location.origin}/verify/${credential.id}`
+    const verificationUrl = `${window.location.origin}/verify/${credential.blockchain_id || credential.id}`
     const skillTag = credential.skill.replace(/\s+/g, '')
 
     const content = {
