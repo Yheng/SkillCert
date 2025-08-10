@@ -11,7 +11,7 @@
 [![IPFS](https://img.shields.io/badge/IPFS-Decentralized-65C2CB?style=flat-square&logo=ipfs&logoColor=white)](https://ipfs.io/)
 [![Blockchain](https://img.shields.io/badge/Web3-Enabled-FF6B6B?style=flat-square&logo=web3dotjs&logoColor=white)](https://web3js.readthedocs.io/)
 
-![Visitor Count](https://visitor-badge.laobi.icu/badge?page_id=Yheng.SkillCert&left_color=blue&right_color=green&left_text=Visitors)
+![Visitor Count](https://komarev.com/ghpvc/?username=Yheng&repo=SkillCert&color=blue&style=flat-square&label=Visitors)
 
 *Empowering freelancers with blockchain-verified micro-credentials to prove expertise and boost hireability by 30% in the gig economy.*
 
