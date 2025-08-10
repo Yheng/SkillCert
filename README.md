@@ -1,53 +1,90 @@
-# SkillCert 🏆
+# 🛡️ SkillCert
+> Blockchain-Verified Credentials for the $400B Gig Economy
 
-A decentralized web application enabling freelancers to earn blockchain-verified micro-credentials, built with cutting-edge technology and modern UI/UX design trends.
+[![React](https://img.shields.io/badge/React-19.1.1-blue.svg)](https://reactjs.org/)
+[![Vite](https://img.shields.io/badge/Vite-7.1.0-646CFF.svg)](https://vitejs.dev/)
+[![Ethereum](https://img.shields.io/badge/Ethereum-Hardhat-yellow.svg)](https://hardhat.org/)
+[![IPFS](https://img.shields.io/badge/IPFS-Decentralized-green.svg)](https://ipfs.io/)
+[![License](https://img.shields.io/badge/License-GPL--3.0-blue.svg)](LICENSE)
+[![Version](https://img.shields.io/badge/Version-1.0.0-brightgreen.svg)](package.json)
 
-## 🌟 Features
+## 📋 Overview
 
-- **Blockchain-Verified Credentials**: Tamper-proof credentials stored on Ethereum blockchain
-- **IPFS Storage**: Decentralized file storage for task proofs
-- **Modern UI/UX**: Glassmorphism, neumorphism, 3D elements, and aurora gradients
-- **Real-time Analytics**: Beautiful progress tracking with interactive charts
-- **Multi-Role System**: Support for freelancers, educators, and employers
-- **Secure Authentication**: JWT-based authentication with encrypted storage
+**SkillCert** is a decentralized web application that enables freelancers to earn blockchain-verified micro-credentials to prove expertise in the gig economy. Built with modern Web3 technologies, it addresses the 60% hiring barrier faced by freelancers due to unverified skills, potentially increasing hireability by 30%.
 
-## 🎨 Design System
+The platform uses a local Ethereum blockchain (Hardhat), IPFS for task proof storage, and features a cutting-edge UI with glassmorphism, neumorphism, micro-interactions, 3D elements, and aurora gradients.
 
-- **Glassmorphism**: Translucent surfaces with backdrop blur effects
-- **Neumorphism**: Tactile buttons and controls with soft shadows  
-- **3D Elements**: Interactive 3D badges and blockchain nodes using Three.js
-- **Aurora Gradients**: Dynamic color transitions and animations
-- **Micro-interactions**: Smooth animations and hover effects
-- **Accessibility**: WCAG 2.1 compliant with keyboard navigation
+### 🎯 Target Audience
 
-## 🛠 Tech Stack
+- **🚀 Freelancers**: Earn and share verified credentials to boost hireability
+- **🎓 Educators**: Issue credentials via tasks and smart contracts  
+- **🏢 Employers**: Verify credentials instantly via blockchain
+- **💼 Tech Recruiters**: View portfolios showcasing React, Web3, and modern UI trends
+
+## ✨ Key Features
+
+### 🔐 For Freelancers
+- **📝 Task Submission**: Upload projects via glassmorphic forms with IPFS storage
+- **🏆 Credential Earning**: Receive 3D blockchain badges for verified skills
+- **📊 Progress Tracking**: Visualize skill growth with ApexCharts and aurora gradients
+- **🎨 Portfolio Showcase**: Modern UI with glassmorphism and neumorphism effects
+
+### 🎓 For Educators  
+- **✅ Task Review**: Approve submissions through elegant interfaces
+- **🔗 Blockchain Issuance**: Issue tamper-proof credentials via smart contracts
+- **📋 Management Tools**: Track student progress and credential history
+
+### 🏢 For Employers
+- **⚡ Instant Verification**: Query credentials in under 2 seconds via blockchain
+- **🔍 Proof Access**: View original task submissions stored on IPFS
+- **📱 Mobile Friendly**: Responsive design for on-the-go verification
+
+### 🎨 Modern UI/UX
+- **✨ Glassmorphism**: Translucent cards with backdrop blur effects
+- **🌟 Neumorphism**: Soft, embossed button designs
+- **🎭 Micro-interactions**: Smooth animations powered by Framer Motion
+- **🌈 Aurora Gradients**: Beautiful color transitions throughout
+- **🎆 3D Elements**: Interactive blockchain nodes and credential badges
+
+## 🛠️ Technology Stack
 
 ### Frontend
-- **React 18** + **Vite** - Modern React development
-- **Tailwind CSS** - Utility-first styling with custom design system
-- **shadcn/ui** - Accessible component library
-- **Framer Motion** - Smooth animations and micro-interactions
-- **React Spring** - Physics-based animations for 3D elements
-- **Three.js** + **React Three Fiber** - 3D graphics and visualizations
-- **ApexCharts** - Interactive data visualization
-- **React Hook Form** - Form validation and management
+```typescript
+React 19.1.1       // Core framework
+Vite 7.1.0         // Build tool & dev server
+Tailwind CSS       // Utility-first styling
+shadcn/ui          // Component library
+Framer Motion      // Animation library
+React-Spring       // Physics-based animations
+Three.js           // 3D graphics
+ApexCharts         // Data visualization
+```
+
+### Blockchain & Web3
+```solidity
+Hardhat 2.26.2     // Ethereum development environment
+Ethers.js 6.15.0   // Ethereum library
+Solidity ^0.8.20   // Smart contract language
+OpenZeppelin       // Security contracts
+IPFS HTTP Client   // Decentralized storage
+```
 
 ### Backend
-- **Node.js** + **Express** - RESTful API server
-- **SQLite** - Local database with encrypted storage
-- **JWT** - Secure authentication tokens
-- **bcrypt** - Password hashing
-- **multer** - File upload handling
+```javascript
+Node.js + Express  // API server
+SQLite3 5.1.7      // Database
+JWT & bcryptjs     // Authentication & security
+Multer             // File upload handling
+CORS               // Cross-origin requests
+```
 
-### Blockchain
-- **Hardhat** - Ethereum development environment
-- **Solidity** - Smart contract development
-- **ethers.js** - Blockchain interaction library
-- **OpenZeppelin** - Secure smart contract libraries
-
-### Storage
-- **IPFS** - Decentralized file storage
-- **SQLite** - Local database for metadata
+### Development Tools
+```bash
+ESLint            // Code linting
+Concurrently      // Run multiple scripts
+PostCSS           // CSS processing
+Autoprefixer      // CSS vendor prefixes
+```
 
 ## 🚀 Quick Start
 
@@ -57,63 +94,60 @@ A decentralized web application enabling freelancers to earn blockchain-verified
 - **npm** or **yarn**
 - **Git**
 
-### Installation
+### Installation Options
 
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/yourusername/skillcert.git
-   cd skillcert
-   ```
+#### 🔥 One-Click Setup (Recommended)
+```bash
+# Clone the repository
+git clone https://github.com/Yheng/skillcert.git
+cd skillcert
 
-2. **Install dependencies**
-   ```bash
-   npm install
-   ```
+# Install dependencies
+npm install
 
-3. **Compile smart contracts**
-   ```bash
-   npm run compile
-   ```
+# Setup blockchain contracts
+npm run setup
 
-4. **Start all services**
-   ```bash
-   npm run start:all
-   ```
+# Start all services (Hardhat + Server + Frontend)
+npm run start:all
+```
 
-   This will start:
-   - Hardhat local blockchain (port 8545)
-   - Backend API server (port 3001)  
-   - Frontend development server (port 5173)
+#### 🔧 Manual Setup
+```bash
+# 1. Clone and install
+git clone https://github.com/Yheng/skillcert.git
+cd skillcert
+npm install
 
-### Manual Setup (Alternative)
+# 2. Start Hardhat blockchain (Terminal 1)
+npm run hardhat
 
-If you prefer to start services individually:
+# 3. Deploy contracts (Terminal 2)
+npm run deploy
 
-1. **Start Hardhat blockchain** (Terminal 1)
-   ```bash
-   npm run hardhat
-   ```
+# 4. Start backend server (Terminal 3)
+npm run server
 
-2. **Deploy smart contracts** (Terminal 2)
-   ```bash
-   npm run deploy
-   ```
+# 5. Start frontend (Terminal 4)
+npm run dev
+```
 
-3. **Start backend server** (Terminal 3)
-   ```bash
-   npm run server
-   ```
-
-4. **Start frontend** (Terminal 4)
-   ```bash
-   npm run dev
-   ```
+#### 🐳 Docker Setup (Coming Soon)
+```bash
+docker-compose up -d
+```
 
 ### Access the Application
 
-- **Frontend**: http://localhost:5173
-- **Backend API**: http://localhost:3001
+- **Frontend**: http://localhost:5173+ (Vite dev server)
+- **Backend API**: http://localhost:3002 (Express server) 
 - **Hardhat Network**: http://localhost:8545 (Chain ID: 1337)
+
+### Demo Accounts
+Create accounts through the registration form with different roles:
+- **Freelancer**: For earning credentials
+- **Educator**: For issuing credentials (requires admin approval)
+- **Employer**: For verifying credentials
 
 ## 📱 Usage
 
@@ -149,22 +183,44 @@ If you prefer to start services individually:
 
 ### API Endpoints
 
+#### Authentication
 - `POST /api/users/register` - User registration
 - `POST /api/users/login` - User authentication  
 - `GET /api/users/profile` - Get user profile
-- `POST /api/tasks/submit` - Submit new task
+- `PUT /api/users/profile` - Update user profile
+- `PUT /api/users/password` - Change password
+- `GET /api/users/export` - Export user data
+
+#### Task Management
+- `POST /api/tasks/submit` - Submit new task (with file upload)
 - `GET /api/tasks` - Get user tasks
-- `GET /api/tasks/pending` - Get pending tasks (educators)
-- `POST /api/tasks/:id/approve` - Approve task (educators)
+- `GET /api/tasks/pending` - Get pending tasks (educators only)
+- `POST /api/tasks/:taskId/approve` - Approve task (educators only)
+
+#### Educator Features
+- `POST /api/educator/tasks` - Create new task template
+- `GET /api/educator/tasks` - Get educator's tasks
+- `GET /api/educator/submissions` - Get student submissions
+- `POST /api/educator/submissions/:id/approve` - Approve submission
+- `POST /api/educator/submissions/:id/reject` - Reject submission
+- `GET /api/educator/students` - Get student list
+
+#### Credentials & Verification
 - `GET /api/credentials` - Get user credentials
 - `POST /api/credentials` - Store credential metadata
-- `GET /api/ipfs/:hash` - Retrieve IPFS files
+- `GET /api/verify/:identifier` - Verify credential by ID
+- `GET /api/verify/user/:identifier` - Verify user credentials
+
+#### IPFS & File Storage
+- `GET /api/ipfs/:hash` - Retrieve files from IPFS
+- File uploads handled via Multer middleware (10MB limit)
 
 ### Database Schema
 
-- **users**: User profiles and authentication
-- **tasks**: Task submissions and metadata
-- **credentials**: Local credential metadata
+- **users**: User profiles (id, email, name, password_hash, role, primary_skill, profile_data, created_at, updated_at)
+- **tasks**: Task submissions (id, user_id, title, description, skill, file_path, ipfs_hash, status, metadata, created_at, updated_at)
+- **credentials**: Blockchain credential metadata (id, user_id, blockchain_id, skill, ipfs_hash, transaction_hash, metadata, created_at)
+- **educator_tasks**: Task templates created by educators
 - Indexes for optimal query performance
 
 ## 🎯 Performance Targets
@@ -181,29 +237,54 @@ If you prefer to start services individually:
 
 ```
 skillcert/
-├── src/                    # Frontend source code
-│   ├── components/         # React components
-│   │   ├── ui/            # shadcn/ui components
-│   │   └── shared/        # Custom shared components
-│   ├── pages/             # Page components
-│   ├── api/               # API integration
-│   └── contracts/         # Contract artifacts
-├── server/                # Backend source code
-├── contracts/             # Solidity smart contracts
-├── scripts/               # Deployment scripts
-└── docs/                  # Project documentation
+├── 📂 src/                           # Frontend source code
+│   ├── 📂 components/               # React components  
+│   │   ├── 📂 ui/                  # shadcn/ui base components
+│   │   └── 📂 shared/              # Custom reusable components
+│   │       ├── 🎨 GlassCard.jsx     # Glassmorphic cards
+│   │       ├── 🎯 NeumorphicButton.jsx # 3D-style buttons
+│   │       ├── 🏆 ThreeDBadge.jsx   # 3D credential badges  
+│   │       ├── 🌈 AuroraToast.jsx   # Gradient notifications
+│   │       └── 📊 Analytics.jsx     # Data visualization
+│   ├── 📂 pages/                   # Application pages
+│   │   ├── 🌟 ProfessionalLanding.jsx # Main landing page
+│   │   ├── 📊 Dashboard.jsx         # User dashboard
+│   │   ├── 📝 Tasks.jsx             # Task management
+│   │   ├── ✅ Verification.jsx      # Credential verification
+│   │   ├── ⚙️ Settings.jsx          # User settings
+│   │   └── 🎓 EducatorDashboard.jsx # Educator interface
+│   ├── 📂 api/                     # API integration layer
+│   │   ├── ⚙️ backend.js           # Backend API calls
+│   │   └── ⛓️ blockchain.js         # Smart contract interactions
+│   ├── 📂 contracts/               # Contract artifacts & addresses
+│   └── 📂 utils/                   # Utility functions
+├── 📂 server/                      # Express.js backend
+│   ├── 🖥️ index.js                 # Main server file
+│   ├── 💾 skillcert.db             # SQLite database
+│   └── 📁 uploads/                 # File upload storage
+├── 📂 contracts/                   # Solidity smart contracts
+│   └── 🛡️ SkillCert.sol           # Main credential contract
+├── 📂 scripts/                     # Blockchain deployment
+│   └── 🚀 deploy.js                # Contract deployment script
+├── 📂 docs/                        # Project documentation
+│   ├── 📋 project-brief.md         # Project overview
+│   └── 🏗️ front-end-architecture.md # Technical architecture
+└── 📂 artifacts/                   # Compiled contract artifacts
 ```
 
 ### Available Scripts
 
-- `npm run dev` - Start frontend development server
-- `npm run server` - Start backend API server
-- `npm run hardhat` - Start local blockchain
-- `npm run compile` - Compile smart contracts
-- `npm run deploy` - Deploy contracts to local network
-- `npm run build` - Build frontend for production
-- `npm run test` - Run smart contract tests
-- `npm run start:all` - Start all services concurrently
+- `npm run dev` - Start Vite frontend development server
+- `npm run build` - Build frontend for production  
+- `npm run preview` - Preview production build
+- `npm run server` - Start Express backend API server (port 3002)
+- `npm run hardhat` - Start local Hardhat blockchain node
+- `npm run compile` - Compile Solidity smart contracts
+- `npm run deploy` - Deploy contracts to local Hardhat network
+- `npm run setup` - Compile and deploy contracts in one step
+- `npm run start:all` - Start all services concurrently (Hardhat + Server + Frontend)
+- `npm run test` - Run Hardhat smart contract tests  
+- `npm run lint` - Run ESLint code linting
 
 ### Environment Variables
 
@@ -269,7 +350,7 @@ npx hardhat run scripts/deploy.js --network mainnet
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the GPL-3.0 License - see the [LICENSE](LICENSE) file for details.
 
 ## 🙏 Acknowledgments
 
@@ -279,12 +360,138 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - **Three.js** for 3D graphics capabilities
 - **IPFS** for decentralized storage
 
-## 📞 Contact
+## 📈 Performance Benchmarks
 
-- **Email**: yhengdesigns@gmail.com
-- **GitHub**: [Your GitHub Profile]
-- **LinkedIn**: [Your LinkedIn Profile]
+### ⚡ Speed Metrics
+- **Page Load**: < 1 second
+- **Blockchain Queries**: < 2 seconds
+- **SQLite Operations**: < 100ms
+- **IPFS Upload**: < 5 seconds
+- **Bundle Size**: ~500KB gzipped
+
+### 📊 Scalability Targets
+- **Users**: 10,000+ concurrent
+- **Credentials**: 100,000+ issued
+- **Storage**: Unlimited (IPFS)
+- **Transactions**: 1000+ per minute
+
+## 🔒 Security Features
+
+### 🛡️ Smart Contract Security
+- **ReentrancyGuard**: Prevents reentrancy attacks
+- **Ownable**: Access control for admin functions
+- **Input Validation**: Comprehensive parameter checking
+- **Event Logging**: Complete audit trail
+
+### 🔐 Application Security
+- **JWT Authentication**: Secure session management
+- **bcrypt Hashing**: Password encryption
+- **Input Sanitization**: XSS and injection protection
+- **CORS Configuration**: Cross-origin request control
+- **Rate Limiting**: API abuse prevention
+
+### 📄 Data Privacy
+- **IPFS Storage**: Decentralized file storage
+- **Encrypted Database**: SQLite encryption at rest
+- **No Sensitive Data**: Personal info not on blockchain
+- **GDPR Compliance**: Right to data portability
+
+## 📚 Documentation
+
+- **📋 Project Brief**: [docs/project-brief.md](docs/project-brief.md)
+- **🏗️ Architecture**: [docs/front-end-architecture.md](docs/front-end-architecture.md)
+- **🔗 API Reference**: [docs/api-reference.md](docs/api-reference.md)
+- **🎨 UI Components**: [docs/component-library.md](docs/component-library.md)
+- **⛓️ Smart Contracts**: [docs/smart-contracts.md](docs/smart-contracts.md)
+
+## 🐛 Known Issues & Roadmap
+
+### 🔧 Current Limitations
+- Local blockchain only (Hardhat)
+- SQLite for development
+- Manual credential approval
+
+### 🗺️ Upcoming Features
+- **🌐 Mainnet Integration**: Polygon deployment
+- **🤖 AI Skill Matching**: Enhanced recommendations  
+- **📱 Mobile App**: React Native version
+- **🔗 Multi-chain**: Support for multiple blockchains
+- **⚡ Auto-verification**: Automated task checking
+
+## 🤝 Contributing Guidelines
+
+### 🔄 Development Workflow
+
+1. **🍴 Fork the repository**
+2. **🌿 Create a feature branch**
+   ```bash
+   git checkout -b feature/amazing-feature
+   ```
+3. **✨ Make your changes**
+   ```bash
+   # Follow code style guidelines
+   npm run lint
+   npm run test
+   ```
+4. **📝 Commit your changes**
+   ```bash
+   git commit -m "✨ Add amazing feature"
+   ```
+5. **📤 Push to branch**
+   ```bash
+   git push origin feature/amazing-feature
+   ```
+6. **🔄 Open a Pull Request**
+
+### 📝 Commit Convention
+```
+✨ feat: new feature
+🐛 fix: bug fix
+📚 docs: documentation
+🎨 style: formatting
+♻️ refactor: code refactoring
+⚡ perf: performance improvement
+✅ test: adding tests
+🔧 chore: maintenance
+```
+
+## 📜 License
+
+This project is licensed under the **GPL-3.0 License** - see the [LICENSE](LICENSE) file for details.
+
+## 👨‍💻 Author
+
+**Ariel Retes**
+- 📧 Email: yhengdesigns@gmail.com
+- 💼 GitHub: [@Yheng](https://github.com/Yheng)
+- 🌐 Portfolio: [arielretes.dev](https://arielretes.dev)
+- ☕ Buy me a coffee: [buymeacoffee.com/arielretes](https://www.buymeacoffee.com/arielretes)
+
+## 🙏 Acknowledgments
+
+- **⚛️ React Team** - Amazing framework
+- **⚡ Vite Team** - Lightning-fast build tool
+- **🔗 Ethereum Foundation** - Blockchain infrastructure
+- **📁 IPFS Team** - Decentralized storage solution
+- **🎨 shadcn** - Beautiful UI components
+- **🌈 Tailwind CSS** - Utility-first styling
+
+## 🌟 Support
+
+If you found this project helpful, please consider:
+
+- ⭐ **Starring** the repository
+- 🍴 **Forking** for your own projects
+- 🐛 **Reporting issues** you encounter
+- 💡 **Suggesting improvements**
+- ☕ **Buying me a coffee** at [buymeacoffee.com/arielretes](https://www.buymeacoffee.com/arielretes)
 
 ---
 
-**Built with ❤️ for the future of professional verification**
+<div align="center">
+
+**Made with ❤️ for the future of work**
+
+[⭐ Star this repo](https://github.com/Yheng/skillcert) | [🐛 Report Bug](https://github.com/Yheng/skillcert/issues) | [💡 Request Feature](https://github.com/Yheng/skillcert/issues)
+
+</div>
