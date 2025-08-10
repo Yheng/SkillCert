@@ -431,6 +431,101 @@ const Auth = () => {
             </div>
           </motion.div>
 
+          {/* Demo Accounts Section */}
+          {!isSignup && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              style={{
+                background: 'rgba(45, 212, 191, 0.05)',
+                backdropFilter: 'blur(10px)',
+                border: '1px solid rgba(45, 212, 191, 0.2)',
+                borderRadius: '16px',
+                padding: '1.5rem',
+                marginTop: '2rem',
+                textAlign: 'center'
+              }}
+            >
+              <h3 style={{ 
+                color: 'var(--teal)',
+                fontSize: '1.1rem',
+                fontWeight: '600',
+                marginBottom: '1rem',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '0.5rem'
+              }}>
+                🚀 Quick Demo Access
+              </h3>
+              
+              <div style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+                gap: '0.75rem',
+                marginBottom: '1rem'
+              }}>
+                {[
+                  { role: 'Freelancer', email: 'freelancer@demo.skillcert', icon: '👤', color: 'var(--blue)' },
+                  { role: 'Educator', email: 'educator@demo.skillcert', icon: '🎓', color: 'var(--green)' },
+                  { role: 'Employer', email: 'employer@demo.skillcert', icon: '🏢', color: 'var(--purple)' },
+                  { role: 'Admin', email: 'admin@demo.skillcert', icon: '⚙️', color: 'var(--teal)' }
+                ].map((demo) => (
+                  <motion.button
+                    key={demo.role}
+                    type="button"
+                    onClick={() => {
+                      setFormData(prev => ({
+                        ...prev,
+                        email: demo.email,
+                        password: 'demo123'
+                      }))
+                    }}
+                    style={{
+                      background: `${demo.color}15`,
+                      border: `1px solid ${demo.color}40`,
+                      borderRadius: '8px',
+                      padding: '0.75rem',
+                      cursor: 'pointer',
+                      color: 'var(--white)',
+                      fontSize: '0.85rem',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      gap: '0.25rem',
+                      transition: 'all 0.3s ease'
+                    }}
+                    whileHover={{ 
+                      scale: 1.02,
+                      backgroundColor: `${demo.color}25`,
+                      borderColor: `${demo.color}60`
+                    }}
+                    whileTap={{ scale: 0.98 }}
+                  >
+                    <span style={{ fontSize: '1.2rem' }}>{demo.icon}</span>
+                    <span style={{ fontWeight: '600', color: demo.color }}>{demo.role}</span>
+                    <span style={{ fontSize: '0.75rem', opacity: 0.8 }}>{demo.email}</span>
+                  </motion.button>
+                ))}
+              </div>
+              
+              <p style={{
+                fontSize: '0.8rem',
+                color: 'var(--light-gray)',
+                opacity: 0.7,
+                margin: 0
+              }}>
+                Click any role above to auto-fill credentials • All use password: <code style={{
+                  background: 'rgba(255, 255, 255, 0.1)',
+                  padding: '2px 6px',
+                  borderRadius: '4px',
+                  fontFamily: 'monospace'
+                }}>demo123</code>
+              </p>
+            </motion.div>
+          )}
+
           {/* Trust Signals */}
           {isSignup && (
             <motion.div

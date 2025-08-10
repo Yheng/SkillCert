@@ -144,10 +144,17 @@ docker-compose up -d
 - **Hardhat Network**: http://localhost:8545 (Chain ID: 1337)
 
 ### Demo Accounts
-Create accounts through the registration form with different roles:
-- **Freelancer**: For earning credentials
-- **Educator**: For issuing credentials (requires admin approval)
-- **Employer**: For verifying credentials
+
+**Pre-created demo accounts for testing:**
+
+| Role | Email | Password | Description |
+|------|-------|----------|-------------|
+| **👤 Freelancer** | `freelancer@demo.skillcert` | `demo123` | Earn and showcase verified credentials |
+| **🎓 Educator** | `educator@demo.skillcert` | `demo123` | Create tasks and issue credentials |
+| **🏢 Employer** | `employer@demo.skillcert` | `demo123` | Verify candidate credentials |
+| **⚙️ Admin** | `admin@demo.skillcert` | `demo123` | Full platform management access |
+
+**Or create your own account** through the registration form with any role above.
 
 ## 📱 Usage
 
@@ -283,6 +290,7 @@ skillcert/
 - `npm run deploy` - Deploy contracts to local Hardhat network
 - `npm run setup` - Compile and deploy contracts in one step
 - `npm run start:all` - Start all services concurrently (Hardhat + Server + Frontend)
+- `npm run demo-accounts` - Create demo accounts for testing different roles
 - `npm run test` - Run Hardhat smart contract tests  
 - `npm run lint` - Run ESLint code linting
 
@@ -466,9 +474,9 @@ This project is licensed under the **GPL-3.0 License** - see the [LICENSE](LICEN
 
 - **⚛️ React Team** - Amazing framework
 - **⚡ Vite Team** - Lightning-fast build tool
-- **🔗 Ethereum Foundation** - Blockchain infrastructure
+- **🔗 OpenZeppelin** - Secure smart contract libraries
 - **📁 IPFS Team** - Decentralized storage solution
-- **🎨 shadcn** - Beautiful UI components
+- **🎨 Radix UI** - Accessible component primitives
 - **🌈 Tailwind CSS** - Utility-first styling
 
 ## 🌟 Support

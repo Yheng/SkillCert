@@ -14,6 +14,7 @@
     "compile": "npx hardhat compile",
     "setup": "npm run compile && npm run deploy",
     "start:all": "concurrently \"npm run hardhat\" \"npm run server\" \"npm run dev\"",
+    "demo-accounts": "node scripts/create-demo-accounts.js",
     "test": "npx hardhat test"
   },
   "dependencies": {
