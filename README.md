@@ -99,6 +99,104 @@
 
 ---
 
+## 📸 **Screenshots**
+
+<div align="center">
+
+### 🏠 **Landing Page & Authentication**
+<table>
+<tr>
+<td align="center">
+<img src="screenshots/landing-page.jpg" alt="Professional Landing Page" width="300"/>
+<br><b>🌟 Professional Landing Page</b>
+</td>
+<td align="center">
+<img src="screenshots/sign-in.jpg" alt="Sign In Page" width="300"/>
+<br><b>🔐 Sign In Interface</b>
+</td>
+<td align="center">
+<img src="screenshots/signup.jpg" alt="Sign Up Page" width="300"/>
+<br><b>📝 Registration Form</b>
+</td>
+</tr>
+</table>
+
+### 📊 **Dashboard & Analytics**
+<table>
+<tr>
+<td align="center">
+<img src="screenshots/dashboard.jpeg" alt="User Dashboard" width="300"/>
+<br><b>🏆 User Dashboard</b>
+</td>
+<td align="center">
+<img src="screenshots/analytics.jpeg" alt="Analytics Page" width="300"/>
+<br><b>📈 Analytics & Progress</b>
+</td>
+<td align="center">
+<img src="screenshots/verification.jpeg" alt="Credential Verification" width="300"/>
+<br><b>🔍 Credential Verification</b>
+</td>
+</tr>
+</table>
+
+### 🎓 **Educator Interface**
+<table>
+<tr>
+<td align="center">
+<img src="screenshots/educator-dashboard.jpeg" alt="Educator Dashboard" width="300"/>
+<br><b>🎯 Educator Dashboard</b>
+</td>
+<td align="center">
+<img src="screenshots/educator-mytask.jpeg" alt="Educator My Tasks" width="300"/>
+<br><b>📋 Task Management</b>
+</td>
+<td align="center">
+<img src="screenshots/educator-viewstudent.jpeg" alt="Student Profiles" width="300"/>
+<br><b>👥 Student Management</b>
+</td>
+</tr>
+</table>
+
+### 📝 **Task Management & Credentials**
+<table>
+<tr>
+<td align="center">
+<img src="screenshots/task.jpeg" alt="Task Submission" width="300"/>
+<br><b>📤 Task Submission</b>
+</td>
+<td align="center">
+<img src="screenshots/certificate.jpg" alt="Certificate Generation" width="300"/>
+<br><b>🏆 Digital Certificates</b>
+</td>
+<td align="center">
+<img src="screenshots/credential-query.jpeg" alt="Credential Query" width="300"/>
+<br><b>🔎 Credential Query System</b>
+</td>
+</tr>
+</table>
+
+### ⚙️ **Settings & Preferences**
+<table>
+<tr>
+<td align="center">
+<img src="screenshots/settings-profile.jpeg" alt="Profile Settings" width="300"/>
+<br><b>👤 Profile Management</b>
+</td>
+<td align="center">
+<img src="screenshots/settings-security.jpeg" alt="Security Settings" width="300"/>
+<br><b>🔒 Security Configuration</b>
+</td>
+<td align="center">
+<img src="screenshots/settings-privacy.jpeg" alt="Privacy Settings" width="300"/>
+<br><b>🛡️ Privacy Controls</b>
+</td>
+</tr>
+</table>
+
+</div>
+
+---
+
 ## ⚡ **Quick Start Guide**
 
 ### 🔧 **Prerequisites**
@@ -527,7 +625,6 @@ This project is licensed under the **GPL-3.0 License** - see the [LICENSE](LICEN
 
 ### **🎨 Created with ❤️ by Ariel Retes**
 
-[![Portfolio](https://img.shields.io/badge/Portfolio-Visit%20My%20Site-FF6B6B?style=for-the-badge&logo=web&logoColor=white)](https://coff.ee/arielretes)
 [![Email](https://img.shields.io/badge/Email-yhengdesigns@gmail.com-D14836?style=for-the-badge&logo=gmail&logoColor=white)](mailto:yhengdesigns@gmail.com)
 [![GitHub](https://img.shields.io/badge/GitHub-Follow%20Me-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Yheng)
 
